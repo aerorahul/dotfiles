@@ -4,15 +4,16 @@ set encoding=utf-8
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" The use of plugins requires .vim/autoload/plug.vim and
-" plugins in .vim/plugged
-" Follow the instructions below to setup plug.vim and plugins
+" The use of plugins requires:
+" .vim/autoload/plug.vim - Enables plugins
+" .vim/plugged - vim-plugins
+" Follow the instructions below to setup plug.vim and plugged
 
 " Download plug.vim and put it in ~/.vim/autoload
 "   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-" Create a directory ~/.vim/plugged and clone the plugins below
+" Create a directory ~/.vim/plugged and clone the plugins below from github
 
 call plug#begin('~/.vim/plugged')
 
@@ -49,12 +50,18 @@ let &colorcolumn="80,".join(range(132,999),",")
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 
-set laststatus=2
+" vim-airline
+set laststatus=2 " always show the last status of the file
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'wombat'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 "let g:airline_powerline_fonts = 1 " needs powerline fonts patch
 "let g:airline#extensions#tabline#show_buffers = 1
 
+" vim-airline-themes
+let g:airline_theme = 'luna'
+
+" vim-signify
 let g:signify_vcs_list = [ 'git', 'svn' ]
 let g:signify_disable_by_default = 1
 nnoremap <leader>gt :SignifyToggle<CR>
@@ -63,6 +70,7 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+" syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
@@ -82,7 +90,7 @@ set softtabstop=4   " no. of spaces that a tab counts (sts)
 set smarttab        " on tab, inserts blanks equal to shiftwidth(sta)
 set expandtab       " expand the tab to appropriate no. of spaces (et)
 
-set cindent         " (cin)
+set cindent         " follow C indenting rules (cin)
 set autoindent      " use current lines indent level to next line (ai)
 set smartindent     " intelligent guess of the new line indent    (si)
 set paste           " put vim in paste mode so we can copy and paste between windows
@@ -100,16 +108,18 @@ set linebreak       " break at the character that extends the width and not at t
 " Toggle line wrapping in normal mode:
 nmap <silent><leader>w :set nowrap!<cr>:set nowrap?<cr>
 
+set so=7            " set 7 lines to the cursor - when moving vertically
 
 set hlsearch        " highlight searches (hls)
 set incsearch       " incremental search (is)
 set ignorecase      " ignore case on searching (ic)
 set smartcase       " acts smart about cases (scs)
 set showmatch       " When a bracket is inserted, briefly jump to the matching one
+set mat=3           " How many tenths of a second to blink when matching brackets
 
 "set listchars=tab:>-,extends:»,precedes:«,trail:•
 set listchars=tab:▸\ ,extends:»,precedes:«,trail:•,eol:¬,nbsp:_
-set nolist
+set nolist " list mode
 nmap <leader>l :set list!<CR>
 "let &showbreak=''
 
@@ -136,6 +146,8 @@ autocmd BufEnter *.pl set comments=b:#
 autocmd BufLeave *.pl set comments=sr:/*,mb:*,el:*/,://,b:#,:%,:XCOMM,n:>,fb:-
 
 " python programs
+let python_highlight_all = 1
+au FileType python syn keyword pythonDecorator True None False self
 autocmd BufEnter *.py,*.psp set syntax=python
 autocmd BufRead  *.py,*.psp set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead  *.py,*.psp inoremap # X#
@@ -175,8 +187,8 @@ autocmd BufEnter *.tex map <F4> {\it
 autocmd BufEnter *.htm* map <F1> <\
 autocmd BufEnter *.htm* map <F2> >
 
-set foldmethod=syntax
-set nofoldenable "          dont fold by default
+set foldmethod=syntax " folding for current window (fdm)
+set nofoldenable      " dont fold by default (nofen)
 
 " Toggle between line numbers and relative line numbers
 nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
@@ -186,6 +198,7 @@ set dictionary=/usr/bin/dict/ " specify the location of dictionary directory (di
 set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
 
 set ruler           " bottom line showing location of cursor (ru)
+set cmdheight=2     " set command bar height
 set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
 set novisualbell    " turn off visual bell (novb)
 set noerrorbells    " turn off error bell or beep (noeb)
@@ -207,13 +220,17 @@ nnoremap <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
+" lanuage and spell check
 nnoremap <silent> <leader>s :set spell!<CR>
+let $LANG='en_us'
+set langmenu=en_us
 set spelllang=en_us
 
 set wildmode=list:full " completion mode used with character specified with wildchar (wim)
 set wildchar=<TAB>     " character to type to start wildcard expansion in command line (wc)
-set wildmenu
-set wildignore=*.o,*.mod
+set wildmenu           " enable completion upon <Tab> (wmnu)
+set wildignore=*.o,*.mod,*~,*.pyc " ignore filetypes
+set wildignore+=.git\*,.hg\*,.svn\* " also ignore version control files
 
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -224,4 +241,10 @@ vnoremap < <gv
 vnoremap > >gv
 vnoremap . .gv
 
-set ttyfast
+set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
+
+" strip out whitespace on save for certain files
+autocmd BufWrite *.py :call StripWhitespace()
+
+" Make VIM remember position in file after reopen
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
