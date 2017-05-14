@@ -1,0 +1,421 @@
+###############################################################
+# < next few lines under version control, D O  N O T  E D I T >
+# $Date$
+# $Revision$
+# $Author$
+# $Id$
+###############################################################
+
+###############################################################
+# This file is read each time a C-shell starts up, such as when
+# you log in.  It is read before .login
+###############################################################
+
+# Stop here unless using an interactive shell
+if ( ! $?prompt ) exit
+
+###############################################################
+# Nothing above this line should produce any output.
+# If it does, it will interfere with scp, sftp, etc.
+###############################################################
+
+###############################################################
+# Make sure TERMCAP entry for xterm is correct
+if ($?TERM) then
+    if ($TERM == "xterm") then
+	    resize > /tmp/out.$$
+		source /tmp/out.$$
+		\rm /tmp/out.$$
+    endif
+endif
+###############################################################
+
+###############################################################
+# Define the prompt to include history number and host name.
+# Only do this if this shell is an interactive one.
+if ($?USER == 0 || $?prompt == 0) exit
+if ($?tcsh) then
+	set prompt = "%h %m%% "
+#	set prompt = "%n %c%% "
+else
+	set prompt = "\! `hostname | sed -e 's/\..*//'`% "
+endif
+###############################################################
+
+###############################################################
+set host = `/bin/hostname`
+set arch = `/usr/bin/uname`
+###############################################################
+
+###############################################################
+# Set options
+
+# Do not log out automatically
+unset autologout
+
+# filec     : Enable file completion
+# fignore   : Suffixes to ignore on file completion
+# history   : How many past commands to remember
+# ignoreeof : Don't let CTRL-D log you off
+# noclobber : Don't overwrite existing files with ">"
+# notify    : Report changes in status of background jobs
+set filec
+set fignore = (.o ~)
+set history = 1024
+set savehist = ( 1024 merge )
+set histfile = ~/.history
+set ignoreeof
+set noclobber
+set notify
+
+# addsuffix : Distinguish files from directories
+# autolist  : Automatic tab completion
+set addsuffix
+set autolist
+
+# correct : Correct misspelled commands on the prompt, valid options cmd, all
+set correct=cmd
+#unset correct
+###############################################################
+
+###############################################################
+# Useful key bindings
+bindkey "^R" i-search-back
+###############################################################
+
+###############################################################
+# Save umask; read (man umask) for more options
+# 077 - gives group and others NO permissions at all; only you can read the file
+# 027 - gives group READ-ONLY permission; others cannot read or write
+# 022 - gives group and others READ-ONLY permission; others can read but not write
+# 002 - gives others in your group WRITE-permission; you and your group can edit your files, but nobody else can
+#
+# umask options ( taken from http://en.wikipedia.org/wiki/Umask )
+#  0 – none          (i.e. all permissions specified are preserved)
+#  1 – execute only
+#  2 – write only
+#  3 – write and execute
+#  4 – read only
+#  5 – read and execute
+#  6 – read and write
+#  7 – read, write and execute (i.e. no permissions are preserved)
+# 1st digit user 2nd digit group 3rd digit others
+umask 022
+###############################################################
+
+###############################################################
+# Set limits ; i.e. set all limits to unlimited
+limit cputime      unlimited
+limit filesize     unlimited
+limit stacksize    unlimited
+limit datasize     unlimited
+limit coredumpsize 0
+limit memoryuse    unlimited
+###############################################################
+
+###############################################################
+# Set user-defined environment variables
+
+# Display's time of history items
+setenv HISTTIMEFORMAT '%F %T '
+
+# Default Editor
+setenv EDITOR /Applications/MacVim.app/Contents/MacOS/Vim
+
+# Default mail reply to
+setenv REPLYTO aerorahul@gmail.com
+
+# large file support for WRF
+setenv WRFIO_NCD_LARGE_FILE_SUPPORT 1
+
+# DART UCAR Repository address
+setenv DARTREP https://proxy.subversion.ucar.edu/DAReS/DART/
+
+# Intel Fortran compiler, Debugger, MKL
+# For EPD f2py, it is recommended to use ia32, since EPD is ia32
+if ( -f /opt/intel/bin/ifortvars.csh ) then
+    #source /opt/intel/bin/ifortvars.csh ia32      # 32-bit [Use one or the other]
+    #source /opt/intel/bin/iccvars.csh ia32        # 32-bit [Use one or the other]
+    source /opt/intel/bin/ifortvars.csh intel64   # 64-bit [Use one or the other]
+    source /opt/intel/bin/iccvars.csh intel64     # 64-bit [Use one or the other]
+endif
+
+# Open-MPI
+#if ( $?DYLD_LIBRARY_PATH ) then
+#    setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:/opt/mpi/lib
+#else
+#    setenv DYLD_LIBRARY_PATH opt/mpi/lib
+#endif
+#set path = ( /opt/mpi/bin $path)
+
+# NetCDF
+#setenv NETCDF /usr/local/opt/netcdf
+
+# NCVIEW
+setenv XFILESEARCHPATH /usr/X11R6/lib/X11/app-defaults/%N:/opt/local/lib/X11/app-defaults/%N
+
+# NCAR Graphics Root
+setenv NCARG_ROOT /opt/ncl_ncarg/Current
+set path = ( $NCARG_ROOT/bin $path )
+
+# SVN specific environments
+setenv SVN_ROOT https://svnemc.ncep.noaa.gov
+setenv SVN_PROJ $SVN_ROOT/projects
+setenv SVN_GSI  $SVN_PROJ/gsi
+setenv SVN_GFS  $SVN_PROJ/gfs
+setenv SVN_SAND $SVN_PROJ/sandbox/Rahul.Mahajan
+
+# SVN EDITOR
+setenv SVN_EDITOR vim
+
+# No. of threads for Math Kernel Libraries
+setenv MKL_NUM_THREADS `sysctl -n hw.ncpu`
+
+# Matlab Path to include my specific utility directories
+setenv MATLABPATH /Users/rmahajan/.matlab/matlab_startup
+
+# NOBACKUP, GEOS5, GEOSDAS etc once discover is mounted
+setenv NOBACKUP /discover/nobackup/rmahajan
+setenv GEOS5    $NOBACKUP/geos5
+setenv GEOSDAS  $NOBACKUP/geosdas
+
+# da, global, ptmp, stmp once zeus is mounted
+setenv Tda         /scratch4/NCEPDEV/da/save/Rahul.Mahajan
+setenv Tnoscda     /scratch4/NCEPDEV/da/noscrub/Rahul.Mahajan
+setenv Tscda       /scratch4/NCEPDEV/da/scrub/Rahul.Mahajan
+setenv Tglobal     /scratch4/NCEPDEV/global/save/Rahul.Mahajan
+setenv Tnoscglobal /scratch4/NCEPDEV/global/noscrub/Rahul.Mahajan
+setenv Tscglobal   /scratch4/NCEPDEV/global/scrub/Rahul.Mahajan
+setenv Tstmp /scratch3/NCEPDEV/stmp3/Rahul.Mahajan
+setenv Tptmp /scratch3/NCEPDEV/stmp4/Rahul.Mahajan
+
+# Tapenade needs these environment variables
+setenv TAPENADE_HOME $HOME/work/tapenade3.8
+setenv JAVA_HOME /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+###############################################################
+
+###############################################################
+# Set path
+
+set path = (                         \
+            /Applications/Xcode.app/Contents/Developer/usr/bin   \
+            /Applications/Xcode.app/Contents/Developer/usr/sbin  \
+            /opt/opengrads/Contents \
+            .                       \
+            ${home}/bin             \
+            ${path}                 \
+          )
+
+# Set path for OPEN-MPI
+#set path = (                          \
+    #             /opt/mpi/ifort/12.1/bin  \
+        #         ${path}                  \
+            #   )
+###############################################################
+
+###############################################################
+# Set user-defined aliases
+
+# Aliases to make sure that the copy, move, and remove programs
+# ask you for confirmation. If you don't like this (i.e., if
+# you know what you're doing), delete these lines.
+alias cp 'cp -i'
+alias mv 'mv -i'
+alias rm 'rm -i'
+
+# Commonly used aliases
+alias h     'history'
+alias df    'df -h'
+alias du    'du -hs'
+#alias which 'type --all'
+alias grep  'grep --color'
+
+# Aliases used with man
+alias appropos 'man -k'
+alias fman     'nroff -man \!* | more -s'
+alias fme      'tbl \!* | nroff -me |more -s'
+
+#	Aliases for ls
+setenv LSCOLORS "ExGxCxDxBxegedabagaced" # Good for dark background
+alias ls   '/bin/ls -G'
+alias l    'ls -l'
+alias ll   'ls -l'
+alias lh   'ls -lh'
+alias la   'ls -la'
+alias ld   'ls -lt  | grep drw'
+alias lad  'ls -lat | grep drw'
+alias lrt  'ls -lrt'
+alias lart 'ls -lart'
+alias l1   'ls -1'
+alias l1rt 'ls -1rt'
+
+# Aliases for changing directories
+alias echopwd   'echo "changing directory to ... `pwd`"'
+
+# Aliases for applications
+alias ncview    'ncview -nc 32 -extra'
+
+# Aliases for ssh
+alias sshx  '/usr/bin/ssh -X'
+alias sshy  '/usr/bin/ssh -Y'
+alias sshxy '/usr/bin/ssh -X -Y'
+
+# Aliases for UW machines
+alias pvort 'sshxy -l rahulm pvort.atmos.uw.edu'
+alias strat 'sshxy -l rahulm stratopause.atmos.uw.edu'
+alias p     'sshxy -l rahulm p.atmos.uw.edu'
+alias enkf  'sshxy -l rahulm enkf.atmos.uw.edu'
+alias enkf1 'sshxy -l rahulm enkf.atmos.uw.edu -p 8001'
+
+# Environment aliases for UW machines
+setenv STRATOPAUSE rahulm@stratopause.atmos.uw.edu
+setenv PVORT       rahulm@pvort.atmos.uw.edu
+
+# Aliases for westeros's machines; See ~/.ssh/config for settings
+alias dornelocal 'ssh dorne.local'
+alias dorne      'ssh dorne'
+
+# Aliases for NCCS machines (create a tunnel with tnccs first)
+alias nccs     'sshxy -l rmahajan login.nccs.nasa.gov'
+alias discover 'sshxy -l rmahajan discover'
+alias dali     'sshxy -l rmahajan dali'
+alias dali-gpu 'sshxy -l rmahajan dali-gpu'
+alias dirac    'sshxy -l rmahajan dirac'
+
+# Aliases for SSEC machines
+alias s4       'sshxy s4'
+alias cardinal 'sshxy -t s4 ssh -XY cardinal'
+alias  mount_s4data 'sshfs s4:/data/users/rmahajan /data/users/rmahajan'
+alias umount_s4data 'umount /data/users/rmahajan'
+
+# Alias for NCEP/NOAA machines
+alias emc          'sshxy -q emc'
+
+alias theiaTunnel   'sshxy -q -L 45545:localhost:45545 theia'
+alias theiabTunnel  'sshxy -q -L 45545:localhost:45545 theiaBoulder'
+alias theiaLocal    'sshxy -q theiaLocal'
+alias theiaVIAemc        'sshxy -q -A -t emc         ssh -q -A theiaLocal'
+alias theiaVIAdorne      'ssh   -q -A -t dorne       ssh -q -A theiaLocal'
+alias theiaVIAdornelocal 'ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
+alias scpFromTheia   'scp      theiaLocal:\!:1 \!:2*'
+alias scpToTheia     'scp \!:1 theiaLocal:\!:2*'
+alias rsyncFromTheia 'rsync -auvx --progress      theiaLocal:\!:1 \!:2*'
+alias rsyncToTheia   'rsync -auvx --progress \!:1 theiaLocal:\!:2*'
+alias  mount_theia 'sshfs theiaLocal:/home/Rahul.Mahajan /home/Rahul.Mahajan'
+alias umount_theia 'umount /home/Rahul.Mahajan'
+alias  mount_tglobal 'sshfs theiaLocal:/scratch4/NCEPDEV/global /scratch4/NCEPDEV/global'
+alias umount_tglobal 'umount /scratch4/NCEPDEV/global'
+alias  mount_tda     'sshfs theiaLocal:/scratch4/NCEPDEV/da /scratch4/NCEPDEV/da'
+alias umount_tda     'umount /scratch4/NCEPDEV/da'
+
+alias devwcossMaster  'sshxy -MNfq devwcoss'
+alias devwcoss        'sshxy -q    devwcoss'
+alias devwcossVIAemc  'sshxy -q -A -t emc ssh -q -A devwcoss'
+alias devwcossVIAdornelocal 'sshxy -q -A -t dorne.local ssh -q -A devwcoss'
+alias emcVIAdornelocal 'sshxy -q -A -t dorne.local ssh -q -A emc'
+alias prodwcossMaster  'sshxy -MNfq prodwcoss'
+alias prodwcoss        'sshxy -q    prodwcoss'
+alias prodwcossVIAemc  'sshxy -q -A -t emc ssh -q -A prodwcoss'
+alias prodwcossVIAdornelocal 'sshxy -q -A -t dorne.local ssh -q -A prodwcoss'
+
+# Aliases in svn-repo and svn-work directories
+alias svnrep  'cd ${home}/svn-repo; echopwd'
+alias svnwork 'cd ${home}/svn-work; echopwd'
+alias scripts 'cd ${home}/svn-work/scripts/trunk/src; echopwd'
+alias wrfdart 'cd ${home}/svn-work/wrf_dart/trunk; echopwd'
+alias dart    'cd ${home}/svn-work/dart/HEAD; echopwd'
+alias kodiak  'cd ${home}/svn-work/dart/kodiak; echopwd'
+alias writing 'cd ${home}/svn-work/writing; echopwd'
+
+# Aliases for SVN
+alias sci      'svn ci'
+alias sdiff    'svn diff'
+alias sstatus  'svn status'
+alias slog     'svn log'
+alias sadd     'svn add'
+alias spropset 'svn propset svn:keywords "Author Id Revision Date"'
+alias sup      'svn up'
+alias sinfo    'svn info'
+
+# Aliases and mistypes for make
+alias mkae 'make'
+alias amke 'make'
+alias akme 'make'
+alias maek 'make'
+
+# Aliases for more and mistypes
+alias more  'less'
+alias mroe  'more'
+alias lesss 'less'
+
+# Aliases for Intel Debugger
+#alias idb 'idb -dbx'
+
+# Aliases for cd and mistypes
+alias dc  'cd'
+alias xs  'cd'
+alias ..  'cd ..'
+alias ... 'cd ../..'
+
+# Aliases for vi, vim, gvim and their mis-typos
+alias vim  '/Applications/MacVim.app/Contents/MacOS/Vim'
+alias vi   'vim'
+alias gvim 'vim -g'
+alias ci   'vi'
+alias cim  'vi'
+alias ciM  'vi'
+alias givm 'gvim'
+alias gcim 'gvim'
+alias givM 'gvim'
+alias gciM 'gvim'
+alias gviM 'gvim'
+
+# Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns
+alias tkcvs  '/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+alias tksvn  '/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+alias tkdiff '/Applications/TkDiff.app/Contents/MacOS/tkdiff'
+
+# Alias for xxdiff
+alias xxdiff '/Applications/xxdiff.app/Contents/MacOS/xxdiff'
+
+# Alias for ps
+alias psr   'ps -U rmahajan'
+alias psax  'ps ax | grep -v root'
+alias psssh 'ps ax | grep ssh'
+
+# Aliases for closing a terminal window
+alias lo 'exit'
+
+# Aliases for tar
+alias ltar  'tar -tvf'
+alias ctar  'tar -cvf'
+alias cztar 'tar -czvf'
+alias xtar  'tar -xvf'
+alias xztar 'tar -xzvf'
+
+# Aliases for open
+alias oepn 'open'
+alias opne 'open'
+
+# Aliases for ldd
+alias ldd 'otool -L'
+
+# Aliases for tail
+alias tf 'tail -f'
+###############################################################
+
+# Setting PATH for EPD-7.3-2
+# The orginal version is saved in .cshrc.pysave
+#set path=(/Library/Frameworks/Python.framework/Versions/Current/bin $path)
+#set path=(/Library/Frameworks/EPD64.framework/Versions/Current/bin $path)
+#set path=(/opt/anaconda/bin $path)
+#setenv PYTHONPATH "/Users/rmahajan/Work/python_lib"
+
+# Common libraries built with Intel compilers
+# NetCDF, HDF5, UDUNITS2, etc.
+#set path = ( /opt/common_libs/bin $path )
+    #if ( $?DYLD_LIBRARY_PATH ) then
+    #    setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:/opt/common_libs/lib
+    #else
+    #    setenv DYLD_LIBRARY_PATH /opt/common_libs/lib
+    #endif
