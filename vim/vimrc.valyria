@@ -1,3 +1,6 @@
+" Rahul Mahajan
+" vimrc and plugins
+
 scriptencoding utf-8
 set encoding=utf-8
 
@@ -27,6 +30,7 @@ Plug 'vim-scripts/visSum.vim'
 Plug 'will133/vim-dirdiff'
 Plug 'mhinz/vim-signify'
 Plug 'scrooloose/syntastic'
+Plug 'ervandew/supertab'
 
 call plug#end()
 filetype plugin indent on
@@ -48,6 +52,7 @@ highlight ColorColumn ctermbg=235 guibg=#2c2d27
 let &colorcolumn="80,".join(range(132,999),",")
 "call matchadd('ColorColumn', '\%81v', 100)
 
+" vim-better-whitespace'
 highlight ExtraWhitespace ctermbg=red guibg=red
 
 " vim-airline
@@ -154,9 +159,6 @@ autocmd BufRead  *.py,*.psp inoremap # X#
 autocmd BufRead  *.py,*.psp set tabstop=4
 autocmd BufRead  *.py,*.psp set shiftwidth=4
 autocmd BufRead  *.py,*.psp set softtabstop=4
-autocmd BufRead  *.py,*.psp highlight BadWhitespace ctermbg=red guibg=red
-autocmd BufRead  *.py,*.psp match BadWhitespace /^\t\+/
-autocmd BufRead  *.py,*.psp match BadWhitespace /\s\+$/
 
 " fortran programs
 autocmd BufRead *.f*,*.F* let fortran_have_tabs=1
@@ -243,8 +245,11 @@ vnoremap . .gv
 
 set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
 
-" strip out whitespace on save for certain files
-autocmd BufWrite *.py :call StripWhitespace()
+" vim-better-whitespace'
+autocmd FileType python,fortran,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+"autocmd BufEnter *.py,*.psp EnableStripWhitespaceOnSave
+"autocmd BufEnter *.f*,*.F* EnableStripWhitespaceOnSave
+"autocmd BufEnter *.*sh EnableStripWhitespaceOnSave
 
 " Make VIM remember position in file after reopen
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
