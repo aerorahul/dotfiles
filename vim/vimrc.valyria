@@ -4,13 +4,18 @@ set encoding=utf-8
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Download plug.vim and put it in ~/.vim/autoload
+"   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 " plugins
 call plug#begin('~/.vim/plugged')
 
+Plug 'flazz/vim-colorschemes'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tmhedberg/matchit'
-Plug 'bronson/vim-trailing-whitespace'
+Plug 'npeters/vim-better-whitespace'
 Plug 'gerw/vim-HiLinkTrace'
 Plug 'vim-scripts/visSum.vim'
 Plug 'will133/vim-dirdiff'
@@ -27,11 +32,16 @@ set cursorline
 set t_Co=256
 colorscheme xoria256
 set guifont=Monaco:h13
+if has("gui_running")
+    set lines=80
+    set columns=100
+endif
 
 set colorcolumn=80
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 let &colorcolumn="80,".join(range(132,999),",")
 "call matchadd('ColorColumn', '\%81v', 100)
+
 highlight ExtraWhitespace ctermbg=red guibg=red
 
 set laststatus=2
@@ -70,7 +80,7 @@ set expandtab       " expand the tab to appropriate no. of spaces (et)
 set cindent         " (cin)
 set autoindent      " use current lines indent level to next line (ai)
 set smartindent     " intelligent guess of the new line indent    (si)
-set paste
+set paste           " put vim in paste mode so we can copy and paste between windows
 
 set magic           " special characters, always keep on
 set title           " set title of window to filename
@@ -91,7 +101,6 @@ set incsearch       " incremental search (is)
 set ignorecase      " ignore case on searching (ic)
 set smartcase       " acts smart about cases (scs)
 set showmatch       " When a bracket is inserted, briefly jump to the matching one
-nnoremap <silent> <BS> :nohlsearch<CR>  " trun off search highlight matches
 
 "set listchars=tab:>-,extends:»,precedes:«,trail:•
 set listchars=tab:▸\ ,extends:»,precedes:«,trail:•,eol:¬,nbsp:_
@@ -165,6 +174,7 @@ set foldmethod=syntax
 set nofoldenable "          dont fold by default
 
 " Toggle between line numbers and relative line numbers
+nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
 nnoremap <silent><leader>n :exe "set " . (&rnu == 1 ? "nornu" : "rnu")<cr>
 
 set dictionary=/usr/bin/dict/ " specify the location of dictionary directory (dict)
