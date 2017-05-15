@@ -5,18 +5,8 @@ scriptencoding utf-8
 set encoding=utf-8
 
 set nocompatible              " be iMproved, required
-filetype off                  " required
+filetype off                  " required to use plugins, will turn on after plugins are initialized
 
-" The use of plugins requires:
-" .vim/autoload/plug.vim - Enables plugins
-" .vim/plugged - vim-plugins
-" Follow the instructions below to setup plug.vim and plugged
-
-" Download plug.vim and put it in ~/.vim/autoload
-"   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-" Create a directory ~/.vim/plugged and clone the plugins below from github
 
 call plug#begin('~/.vim/plugged')
 
@@ -33,6 +23,8 @@ Plug 'scrooloose/syntastic'
 Plug 'ervandew/supertab'
 
 call plug#end()
+
+
 filetype plugin indent on
 
 
@@ -41,16 +33,18 @@ set background=dark
 set cursorline
 set t_Co=256
 colorscheme xoria256
-set guifont=Monaco:h13
 if has("gui_running")
+    set guifont=Monaco:h13
     set lines=80
     set columns=100
 endif
 
-set colorcolumn=80
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
-let &colorcolumn="80,".join(range(132,999),",")
-"call matchadd('ColorColumn', '\%81v', 100)
+if version >= 703
+    set colorcolumn=80
+    highlight ColorColumn ctermbg=235 guibg=#2c2d27
+    let &colorcolumn="80,".join(range(132,999),",")
+    "call matchadd('ColorColumn', '\%81v', 100)
+endif
 
 " vim-better-whitespace'
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -190,7 +184,7 @@ autocmd BufEnter *.htm* map <F1> <\
 autocmd BufEnter *.htm* map <F2> >
 
 set foldmethod=syntax " folding for current window (fdm)
-set nofoldenable      " dont fold by default (nofen)
+"set nofoldenable      " dont fold by default (nofen)
 
 " Toggle between line numbers and relative line numbers
 nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
