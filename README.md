@@ -1,7 +1,7 @@
-# dotfiles
-custom dot files
+# dotfiles #
+A repository to hold custom dot files e.g. `.cshrc`, `.vimrc`, etc.
 
-# vimrc
+## vimrc ##
 The use of plugins requires:
 * `.vim/autoload/plug.vim` - Enables plugins
 * `.vim/plugged` - location of vim-plugins
@@ -22,5 +22,5 @@ The following plugins are used:
 * scrooloose/syntastic
 * ervandew/supertab
 
-These plugins can be cloned from `github`
+These plugins can be cloned from [GitHub](www.github.com)
 * `git clone https://github.com/$plugin.git`
