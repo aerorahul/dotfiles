@@ -1,0 +1,262 @@
+###############################################################
+# < next few lines under version control, D O  N O T  E D I T >
+# $Date$
+# $Revision$
+# $Author$
+# $Id$
+###############################################################
+
+###############################################################
+# This file is read each time a C-shell starts up, such as when
+# you log in.  It is read before .login
+###############################################################
+
+# Stop here unless using an interactive shell
+if ( ! $?prompt ) exit
+
+###############################################################
+# Nothing above this line should produce any output.
+# If it does, it will interfere with scp, sftp, etc.
+###############################################################
+
+###############################################################
+# Make sure TERMCAP entry for xterm is correct
+if ($?TERM) then
+    if ($TERM == "xterm") then
+	    resize > /tmp/out.$$
+		source /tmp/out.$$
+		\rm /tmp/out.$$
+    endif
+endif
+###############################################################
+
+###############################################################
+# Define the prompt to include history number and host name.
+# Only do this if this shell is an interactive one.
+if ($?user == 0 || $?prompt == 0) exit
+if ($?tcsh) then
+	set prompt = "%h %m%% "
+#	set prompt = "%n %c%% "
+else
+	set prompt = "\! `hostname | sed -e 's/\..*//'`% "
+endif
+###############################################################
+
+###############################################################
+set host = `/bin/hostname`
+set arch = `/usr/bin/uname`
+###############################################################
+
+###############################################################
+# Set options
+
+# Do not log out automatically
+unset autologout
+
+# filec     : Enable file completion
+# fignore   : Suffixes to ignore on file completion
+# history   : How many past commands to remember
+# ignoreeof : Don't let CTRL-D log you off
+# noclobber : Don't overwrite existing files with ">"
+# notify    : Report changes in status of background jobs
+set filec
+set fignore = (.o ~)
+set history = 1024
+set savehist = ( 1024 merge )
+set histfile = ~/.history
+set ignoreeof
+set noclobber
+set notify
+
+# addsuffix : Distinguish files from directories
+# autolist  : Automatic tab completion
+set addsuffix
+set autolist
+
+# correct : Correct misspelled commands on the prompt, valid options cmd, all
+set correct=cmd
+#unset correct
+
+# run time automatically when commands take more than 60s
+set time = 60
+
+###############################################################
+
+###############################################################
+# Useful key bindings
+bindkey "^R" i-search-back
+###############################################################
+
+###############################################################
+# Save umask; read (man umask) for more options
+# 077 - gives group and others NO permissions at all; only you can read the file
+# 027 - gives group READ-ONLY permission; others cannot read or write
+# 022 - gives group and others READ-ONLY permission; others can read but not write
+# 002 - gives others in your group WRITE-permission; you and your group can edit your files, but nobody else can
+#
+# umask options ( taken from http://en.wikipedia.org/wiki/Umask )
+#  0 – none          (i.e. all permissions specified are preserved)
+#  1 – execute only
+#  2 – write only
+#  3 – write and execute
+#  4 – read only
+#  5 – read and execute
+#  6 – read and write
+#  7 – read, write and execute (i.e. no permissions are preserved)
+# 1st digit user 2nd digit group 3rd digit others
+umask 022
+###############################################################
+
+###############################################################
+# Set limits ; i.e. set all limits to unlimited
+limit cputime      unlimited
+limit filesize     unlimited
+limit stacksize    unlimited
+limit datasize     unlimited
+limit coredumpsize 0
+limit memoryuse    unlimited
+###############################################################
+
+###############################################################
+# Set user-defined environment variables
+
+# Display's time of history items
+setenv HISTTIMEFORMAT '%F %T '
+
+# Default Editor
+setenv EDITOR vim
+
+# Default mail reply to
+setenv REPLYTO rahul.mahajan@noaa.gov
+
+# SVN EDITOR
+setenv SVN_EDITOR $EDITOR
+
+#  Source the module utility for cheyenne
+source /glade/u/apps/ch/opt/lmod/7.2.1/lmod/lmod/init/tcsh
+
+# load modules
+module purge
+module load ncarenv intel ncarcompilers mpt/2.15f
+module load netcdf nco cdo ncview
+module load xxdiff
+module load vim
+module load cmake git
+
+# paths to scratch and work directories
+setenv scratch /glade/scratch/$user
+setenv work    /glade/p/work/$user
+
+###############################################################
+
+###############################################################
+# Set path
+
+set path = (             \
+            .            \
+            ${home}/bin  \
+            ${path}      \
+          )
+
+###############################################################
+
+###############################################################
+# Set user-defined aliases
+
+# Aliases to make sure that the copy, move, and remove programs
+# ask you for confirmation. If you don't like this (i.e., if
+# you know what you're doing), delete these lines.
+alias cp 'cp -i'
+alias mv 'mv -i'
+alias rm 'rm -i'
+
+# Commonly used aliases
+alias h     'history'
+alias df    'df -h'
+alias du    'du -hs'
+alias grep  'grep --color'
+
+#	Aliases for ls
+setenv LSCOLORS "ExGxCxDxBxegedabagaced" # Good for dark background
+alias ls   '/bin/ls --color=auto'
+alias l    'ls -l'
+alias ll   'ls -l'
+alias lh   'ls -lh'
+alias la   'ls -la'
+alias ld   'ls -lt  | grep drw'
+alias lad  'ls -lat | grep drw'
+alias lrt  'ls -lrt'
+alias lart 'ls -lart'
+alias l1   'ls -1'
+alias l1rt 'ls -1rt'
+
+# Aliases for changing directories
+alias echopwd   'echo "changing directory to ... `pwd`"'
+
+# Aliases for applications
+alias ncview    'ncview -nc 32 -extra'
+
+# Aliases for ssh
+alias sshx  '/usr/bin/ssh -X'
+alias sshy  '/usr/bin/ssh -Y'
+alias sshxy '/usr/bin/ssh -X -Y'
+
+# Aliases for SVN
+alias sci      'svn ci'
+alias sdiff    'svn diff'
+alias sstatus  'svn status'
+alias slog     'svn log'
+alias sadd     'svn add'
+alias spropset 'svn propset svn:keywords "Author Id Revision Date"'
+alias sup      'svn up'
+alias sinfo    'svn info'
+
+# Aliases and mistypes for make
+alias mkae 'make'
+alias amke 'make'
+alias akme 'make'
+alias maek 'make'
+
+# Aliases for more and mistypes
+setenv LESS "-cMe"
+alias more  'less'
+alias mroe  'more'
+alias lesss 'less'
+
+# Aliases for cd and mistypes
+alias dc  'cd'
+alias xs  'cd'
+alias ..  'cd ..'
+alias ... 'cd ../..'
+
+alias vi   'vim'
+alias ci   'vi'
+alias cim  'vi'
+alias ciM  'vi'
+alias givm 'gvim'
+alias gcim 'gvim'
+alias givM 'gvim'
+alias gciM 'gvim'
+alias gviM 'gvim'
+
+# Alias for ps
+alias psr   'ps -U rahulm'
+alias psax  'ps ax | grep -v root'
+alias psssh 'ps ax | grep ssh'
+
+# Aliases for closing a terminal window
+alias lo 'exit'
+
+# Aliases for tar
+alias ltar  'tar -tvf'
+alias ctar  'tar -cvf'
+alias cztar 'tar -czvf'
+alias xtar  'tar -xvf'
+alias xztar 'tar -xzvf'
+
+# Aliases for open
+alias oepn 'open'
+alias opne 'open'
+
+# Aliases for tail
+alias tf 'tail -f'
