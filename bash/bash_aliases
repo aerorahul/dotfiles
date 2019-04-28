@@ -19,8 +19,13 @@ alias appropos='man -k'
 alias fman='nroff -man \!* | more -s'
 alias fme='tbl \!* | nroff -me |more -s'
 
-#	Aliases for ls
-alias ls='/bin/ls -G'
+#   Aliases for ls
+case $OSTYPE in
+    darwin* )
+        alias ls='/bin/ls -G' ;;
+    linux-gnu )
+        alias ls='/bin/ls --color=auto' ;;
+esac
 alias l='ls -l'
 alias ll='ls -l'
 alias lh='ls -lh'
@@ -31,6 +36,7 @@ alias lrt='ls -lrt'
 alias lrta='ls -lart'
 alias l1='ls -1'
 alias l1rt='ls -1rt'
+alias sl='ls'
 
 # Aliases for changing directories
 alias echopwd='echo "changing directory to ... `pwd`"'
@@ -47,12 +53,11 @@ alias sshxy='/usr/bin/ssh -X -Y'
 alias dornelocal='ssh dorne.local'
 alias dorne='ssh dorne'
 
-# Aliases for NCCS machines (create a tunnel with tnccs first)
-alias nccs='sshxy -l rmahajan login.nccs.nasa.gov'
-alias discover='sshxy -l rmahajan discover'
-alias dali='sshxy -l rmahajan dali'
-alias dali-gpu='sshxy -l rmahajan dali-gpu'
-alias dirac='sshxy -l rmahajan dirac'
+# Aliases for NCCS machines (create a tunnel with tcluster.py first)
+alias tdiscover='tcluster.py -m discover'
+alias nccs='sshxy nccs'
+alias discover='sshxy discover'
+alias dirac='sshxy dirac'
 
 # Aliases for SSEC machines
 alias s4='sshxy s4'
@@ -61,29 +66,54 @@ alias cardinal='sshxy -t s4 ssh -XY cardinal'
 # Aliases for GMAO machines
 alias polar='sshxy polar'
 alias thunder='sshxy thunder'
+alias cumulus='sshxy cumulus'
+alias panama='ssh panama'
+alias suez='ssh suez'
 
 # Aliases for mounting/unmounting SSHFS volumes
-alias mount_www='sshfs polar:/www/html/intranet/personnel/rmahajan /Users/rmahajan/Volumes/polar/www'
-alias umount_www='umount /Users/rmahajan/Volumes/polar/www'
-alias mount_s4data='sshfs s4:/data/users/rmahajan /Users/rmahajan/Volumes/s4/rmahajan'
-alias umount_s4data='umount /Users/rmahajan/Volumes/s4/rmahajan'
-#alias mount_nobackup='sshfs discover:/discover/nobackup/rmahajan /discover/nobackup/rmahajan'
-#alias umount_nobackup='umount /discover/nobackup/rmahajan'
+# S4
+alias mount_s4data="sshfs s4:/data/users/rmahajan ${HOME}/Volumes/s4/rmahajan"
+alias umount_s4data="umount ${HOME}/Volumes/s4/rmahajan"
+# Polar
+alias mount_www="sshfs polar:/www/html/intranet/personnel/rmahajan ${HOME}/Volumes/polar/www"
+alias umount_www="umount ${HOME}/Volumes/polar/www"
+# Cumulus
+alias mount_datacom="sshfs cumulus:/datacom/rmahajan ${HOME}/Volumes/datacom/rmahajan"
+alias umount_datacom="umount ${HOME}/Volumes/datacom/rmahajan"
+# Discover
+alias mount_discover_home="sshfs discover:/home/rmahajan ${HOME}/Volumes/discover/home/rmahajan"
+alias umount_discover_home="umount ${HOME}/Volumes/discover/home/rmahajan"
+alias mount_discover_nobackup="sshfs discover:/gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan"
+alias umount_discover_nobackup="umount ${HOME}/Volumes/discover/nobackup/rmahajan"
+alias mount_discover_obsdev="sshfs discover:/gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan"
+alias umount_discover_obsdev="umount ${HOME}/Volumes/discover/obsdev/rmahajan"
 
-# Alias for NCEP/NOAA machines
+# Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
 alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
 alias theiaLocal='sshxy -q theiaLocal'
-alias theiaVIAemc='sshxy -q -A -t emc         ssh -q -A theiaLocal'
 alias theiaVIAdorne='ssh   -q -A -t dorne       ssh -q -A theiaLocal'
 alias theiaVIAdornelocal='ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
-alias theiaVIAdornelocalVIAemc='ssh -q -A -t dorne.local ssh -q -A -t emc ssh -q -A theiaLocal'
-alias theiaVIAfrostfangslocal='ssh -q -A -t frostfangs.local ssh -q -A theiaLocal'
-alias theiaVIAfrostfangslocalVIAemc='ssh -q -A -t frostfangs.local ssh -q -A -t emc ssh -q -A theiaLocal'
+
+# Copy to/from Theia
 function scpToTheia() {   scp $1 theiaLocal:$2; }
 function scpFromTheia() { scp theiaLocal:$1 $2; }
 function rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
 function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
+#alias mount_theia='sshfs theiaLocal:/home/Rahul.Mahajan /home/Rahul.Mahajan'
+#alias umount_theia='umount /home/Rahul.Mahajan'
+#alias mount_tglobal='sshfs theiaLocal:/scratch4/NCEPDEV/global /scratch4/NCEPDEV/global'
+#alias umount_tglobal='umount /scratch4/NCEPDEV/global'
+#alias mount_tda='sshfs theiaLocal:/scratch4/NCEPDEV/da /scratch4/NCEPDEV/da'
+#alias umount_tda='umount /scratch4/NCEPDEV/da'
+#alias mount_stmp1='sshfs theiaLocal:/scratch3/NCEPDEV/stmp1 /scratch3/NCEPDEV/stmp1'
+#alias umount_stmp1='umount /scratch3/NCEPDEV/stmp1'
+#alias mount_stmp2='sshfs theiaLocal:/scratch3/NCEPDEV/stmp2 /scratch3/NCEPDEV/stmp2'
+#alias umount_stmp2='umount /scratch3/NCEPDEV/stmp2'
+#alias mount_stmp3='sshfs theiaLocal:/scratch4/NCEPDEV/stmp3 /scratch4/NCEPDEV/stmp3'
+#alias umount_stmp3='umount /scratch4/NCEPDEV/stmp3'
+#alias mount_stmp4='sshfs theiaLocal:/scratch4/NCEPDEV/stmp4 /scratch4/NCEPDEV/stmp4'
+#alias umount_stmp4='umount /scratch4/NCEPDEV/stmp4'
 
 # Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
@@ -123,10 +153,14 @@ alias svnwork='cd ${home}/svn-work; echopwd'
 alias scripts='cd ${home}/svn-work/scripts/trunk/src; echopwd'
 alias writing='cd ${home}/svn-work/writing; echopwd'
 
-# Aliases for Git
+# Aliases for Git mistype and Git commands
 alias gti='git'
-alias gci='git commit'
-alias glg='git log --name-only'
+alias gs='git status'
+alias gl='git lg'
+alias gm='git merge --no-commit --no-ff'
+alias gc='git commit -m'
+alias gd='git diff'
+alias gx='git dl'
 
 # Aliases for SVN
 alias sci='svn ci'
@@ -157,9 +191,15 @@ alias ...='cd ../..'
 alias owd='pwd'
 
 # Aliases for vi, vim, gvim and their mis-typos
+case $OSTYPE in
+    darwin* )
 # MacVim is installed using HomeBrew on a Mac
 alias vi='mvim -v'
-alias gvim='mvim -g'
+        alias gvim='mvim -g' ;;
+    linux-gnu )
+        alias vi='vim'
+        alias gvim='gvim' ;;
+esac
 alias vim='vi'
 alias ci='vi'
 alias ci='vi'
@@ -171,13 +211,14 @@ alias givM='gvim'
 alias gciM='gvim'
 alias gviM='gvim'
 
-# Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns
-alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
-
-# Alias for xxdiff
-alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff'
+# Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns; and xxdiff
+case $OSTYPE in
+    darwin* )
+        alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+        alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+        alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
+        alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff' ;;
+esac
 
 # Alias for diff (Use colordiff)
 alias diff='colordiff'
@@ -191,23 +232,36 @@ alias psssh='ps ax | grep ssh'
 alias lo='exit'
 
 # Aliases for tar
-alias ltar='tar -tvf'
-alias ctar='tar -cvf'
-alias cztar='tar -czvf'
-alias xtar='tar -xvf'
-alias xztar='tar -xzvf'
+alias ltar='tar -tf'
+alias ctar='tar -cf'
+alias cztar='tar -czf'
+alias xtar='tar -xf'
+alias xztar='tar -xzf'
 
 # Aliases for open
-alias oepn='open'
-alias opne='open'
+case $OSTYPE in
+    darwin* )
+        alias oepn='open'
+        alias opne='open'
+esac
 
 # Aliases for ldd
+case $OSTYPE in
+    darwin* )
 alias ldd='otool -L'
+esac
 
 # Aliases for tail
 alias tf='tail -f'
 
 # Aliases for module mis-typos
 alias moduel='module'
+alias mdoule='module'
+alias lmodule='module'
+alias moduele='module'
+
+# Aliases for AWS
+alias sshaws='/usr/bin/ssh -i ~/.ssh/rmahajan-key-pair-nova.pem'
+alias scpaws='/usr/bin/scp -i ~/.ssh/rmahajan-key-pair-nova.pem'
 
 ###############################################################

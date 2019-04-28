@@ -39,8 +39,8 @@ set cursorline
 set t_Co=256
 colorscheme xoria256
 if has("gui_running")
-    set guifont=Monaco:h18
-    set lines=70
+    set guifont=Monaco:h15
+    set lines=80
     set columns=100
 endif
 
@@ -57,8 +57,10 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 " vim-airline
 set laststatus=2 " always show the last status of the file
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep='>'
+let g:airline#extensions#tabline#left_alt_sep='<'
+let g:airline_detect_modified=1
+let g:airline_symbols_ascii=1
 "let g:airline_powerline_fonts = 1 " needs powerline fonts patch
 "let g:airline#extensions#tabline#show_buffers = 1
 
@@ -169,6 +171,7 @@ autocmd BufRead  *.py,*.psp set softtabstop=4
 autocmd BufRead *.f*,*.F* let fortran_have_tabs=1
 autocmd BufRead *.f*,*.F* let fortran_free_source=1
 autocmd BufRead *.f*,*.F* let fortran_do_enddo=1
+autocmd BufRead *.f*,*.F* let fortran_fold=0
 
 " c programs and header files
 "autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r set formatoptions=crql
@@ -194,13 +197,14 @@ autocmd BufEnter *.tex map <F4> {\it
 autocmd BufEnter *.htm* map <F1> <\
 autocmd BufEnter *.htm* map <F2> >
 
-set foldmethod=syntax " folding for current window (fdm)
+"set foldmethod=syntax " folding for current window (fdm)
 "set nofoldenable      " dont fold by default (nofen)
 " Help on folding:
 " To open folds use zR (all) and zr (level by level)
 " To close folds use zM (all) and zm (level by level)
 
 " Toggle between line numbers and relative line numbers
+set number
 nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
 nnoremap <silent><leader>n :exe "set " . (&rnu == 1 ? "nornu" : "rnu")<cr>
 
@@ -242,9 +246,12 @@ set wildmenu           " enable completion upon <Tab> (wmnu)
 set wildignore=*.o,*.mod,*~,*.pyc " ignore filetypes
 set wildignore+=.git\*,.hg\*,.svn\* " also ignore version control files
 
+" maps to open and source vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<CR>
 
+" expand tab and retab in one go
+nnoremap <leader>rt :set expandtab \| :retab<CR>
 
 " visual shifting (does not exit Visual mode)
 vnoremap < <gv

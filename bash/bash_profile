@@ -24,13 +24,14 @@ export PATH=".:$HOME/bin:$PATH"
 ###############################################################
 # Initialize LMOD for modules
 . /usr/local/opt/lmod/init/bash
-module use -a /Users/rmahajan/opt/modulefiles/core
-module use -a /Users/rmahajan/opt/modulefiles/apps
+export OPT=${HOME}/opt
+module use -a ${OPT}/modulefiles/core
+module use -a ${OPT}/modulefiles/apps
 
 ###############################################################
 # Git settings (completion, prompt, environments)
-. ~/.git-completion.bash
-. ~/.git-prompt.sh
+test -e "${HOME}/.git-completion.bash" && source "${HOME}/.git-completion.bash"
+test -e "${HOME}/.git-prompt.sh" && source "${HOME}/.git-prompt.sh"
 export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWUNTRACKEDFILES=true
@@ -38,12 +39,15 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 # Make LS look good
 export LSCOLORS="ExGxCxDxBxegedabagaced" # Good for dark background
 
+# Make LESS more fancy
+export LESS="-FMBIRX"
+unset LESSOPEN
+
 # Add my python libraries to PYTHONPATH
-#export PYTHONPATH="$PYTHONPATH:/Users/rmahajan/Work/python-utils"
+#export PYTHONPATH="$PYTHONPATH:${HOME}/Work/python-utils"
 
 ###############################################################
 # Set user-defined aliases
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
-
+test -e "${HOME}/.bash_aliases" && source "${HOME}/.bash_aliases"
+test -e "$(brew --prefix)/etc/bash_completion" && source "$(brew --prefix)/etc/bash_completion"
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-
