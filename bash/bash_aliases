@@ -13,6 +13,7 @@ alias h='history'
 alias df='df -h'
 alias du='du -hs'
 alias grep='grep --color'
+alias grpe='grep'
 
 # Aliases used with man
 alias appropos='man -k'
@@ -20,7 +21,12 @@ alias fman='nroff -man \!* | more -s'
 alias fme='tbl \!* | nroff -me |more -s'
 
 #	Aliases for ls
-alias ls='/bin/ls -G'
+case $OSTYPE in
+    darwin* )
+        alias ls='/bin/ls -G' ;;
+    linux* )
+        alias ls='/bin/ls --color=auto' ;;
+esac
 alias l='ls -l'
 alias ll='ls -l'
 alias lh='ls -lh'
@@ -39,6 +45,7 @@ alias echopwd='echo "changing directory to ... `pwd`"'
 alias ncview='ncview -nc 32 -extra'
 
 # Aliases for ssh
+alias pivssh='ssh -A -o PKCS11Provider=/usr/lib/ssh-keychain.dylib'
 alias sshx='/usr/bin/ssh -X'
 alias sshy='/usr/bin/ssh -Y'
 alias sshxy='/usr/bin/ssh -X -Y'
@@ -47,12 +54,12 @@ alias sshxy='/usr/bin/ssh -X -Y'
 alias dornelocal='ssh dorne.local'
 alias dorne='ssh dorne'
 
-# Aliases for NCCS machines (create a tunnel with tnccs first)
-alias nccs='sshxy -l rmahajan login.nccs.nasa.gov'
-alias discover='sshxy -l rmahajan discover'
-alias dali='sshxy -l rmahajan dali'
-alias dali-gpu='sshxy -l rmahajan dali-gpu'
-alias dirac='sshxy -l rmahajan dirac'
+# Aliases for NCCS machines (create a tunnel with tcluster.py first)
+alias tdiscover='tcluster.py -m discover'
+alias nccs='sshxy nccs'
+alias discover='sshxy discover'
+alias dirac='sshxy dirac'
+alias tcvsacl='tcluster.py -m cvsacl'
 
 # Aliases for SSEC machines
 alias s4='sshxy s4'
@@ -61,29 +68,131 @@ alias cardinal='sshxy -t s4 ssh -XY cardinal'
 # Aliases for GMAO machines
 alias polar='sshxy polar'
 alias thunder='sshxy thunder'
+alias cumulus='sshxy cumulus'
 
 # Aliases for mounting/unmounting SSHFS volumes
-alias mount_www='sshfs polar:/www/html/intranet/personnel/rmahajan /Users/rmahajan/Volumes/polar/www'
-alias umount_www='umount /Users/rmahajan/Volumes/polar/www'
-alias mount_s4data='sshfs s4:/data/users/rmahajan /Users/rmahajan/Volumes/s4/rmahajan'
-alias umount_s4data='umount /Users/rmahajan/Volumes/s4/rmahajan'
-#alias mount_nobackup='sshfs discover:/discover/nobackup/rmahajan /discover/nobackup/rmahajan'
-#alias umount_nobackup='umount /discover/nobackup/rmahajan'
+function mountDir(){
+    dirName=$1
+    action=$2
+    if [ -d $dirName ]; then
+        if [ $action = "mk" ]; then
+            echo "$dirName exists, use it!"
+            return 1
+        elif [ $action = "rm" ]; then
+            rmdir $dirName
+        else
+            echo "mountDir: unknown action '$action', ABORT!"
+        fi
+    else
+        if [ $action = "mk" ]; then
+            mkdir -p $dirName
+        elif [ $action = "rm" ]; then
+            echo "$dirName does not exist!"
+            return 1
+        else
+            echo "mountDir: unknown action '$action', ABORT!"
+        fi
+    fi
+}
 
-# Alias for NCEP/NOAA machines
+function remoteFS() {
+    action=$1
+    machine=$2
+    remDir=$3
+    locDir=$4
+    if [ $action = "mount" ]; then
+        mountDir $locDir "mk" && sshfs $machine:$remDir $locDir
+    elif [ $action = "umount" ]; then
+        umount $locDir && mountDir $locDir "rm"
+    elif [ $action = "clean" ]; then
+        mountDir $locDir "rm"
+    else
+        echo "Incorrect usage, ABORT!"
+        echo "usage:"
+        echo "remoteFS action machine remDir locDir"
+        echo "    action [mount | umount]"
+        echo "   machine [discover | s4 | cumulus | polar]"
+        echo "    remDir [/full/path/to/remote/dir]"
+        echo "    locDir [/full/path/to/local/dir]"
+        return 1
+    fi
+}
+
+function s4_data(){
+    action=$1
+    machine=s4
+    remDir=/data/users/rmahajan
+    locDir=${HOME}/Volumes/s4/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
+
+function polar_www(){
+    action=$1
+    machine=polar
+    remDir=/www/html/intranet/personnel/rmahajan
+    locDir=${HOME}/Volumes/polar/www
+    remoteFS $action $machine $remDir $locDir
+}
+
+
+function cumulus_datacom(){
+    action=$1
+    machine=cumulus
+    remDir=/datacom/rmahajan
+    locDir=${HOME}/Volumes/datacom/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
+
+function discover_home(){
+    action=$1
+    machine=discover
+    remDir=/home/rmahajan
+    locDir=${HOME}/Volumes/discover/home/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
+
+function discover_nobackup(){
+    action=$1
+    machine=discover
+    remDir=/gpfsm/dnb02/rmahajan
+    locDir=${HOME}/Volumes/discover/nobackup/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
+
+function discover_obsdev(){
+    action=$1
+    machine=discover
+    remDir=/gpfsm/dnb04/projects/p72/rmahajan
+    locDir=${HOME}/Volumes/discover/obsdev/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
+
+# Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
 alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
 alias theiaLocal='sshxy -q theiaLocal'
-alias theiaVIAemc='sshxy -q -A -t emc         ssh -q -A theiaLocal'
 alias theiaVIAdorne='ssh   -q -A -t dorne       ssh -q -A theiaLocal'
 alias theiaVIAdornelocal='ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
-alias theiaVIAdornelocalVIAemc='ssh -q -A -t dorne.local ssh -q -A -t emc ssh -q -A theiaLocal'
-alias theiaVIAfrostfangslocal='ssh -q -A -t frostfangs.local ssh -q -A theiaLocal'
-alias theiaVIAfrostfangslocalVIAemc='ssh -q -A -t frostfangs.local ssh -q -A -t emc ssh -q -A theiaLocal'
+
+# Copy to/from Theia
 function scpToTheia() {   scp $1 theiaLocal:$2; }
 function scpFromTheia() { scp theiaLocal:$1 $2; }
 function rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
 function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
+#alias mount_theia='sshfs theiaLocal:/home/Rahul.Mahajan /home/Rahul.Mahajan'
+#alias umount_theia='umount /home/Rahul.Mahajan'
+#alias mount_tglobal='sshfs theiaLocal:/scratch4/NCEPDEV/global /scratch4/NCEPDEV/global'
+#alias umount_tglobal='umount /scratch4/NCEPDEV/global'
+#alias mount_tda='sshfs theiaLocal:/scratch4/NCEPDEV/da /scratch4/NCEPDEV/da'
+#alias umount_tda='umount /scratch4/NCEPDEV/da'
+#alias mount_stmp1='sshfs theiaLocal:/scratch3/NCEPDEV/stmp1 /scratch3/NCEPDEV/stmp1'
+#alias umount_stmp1='umount /scratch3/NCEPDEV/stmp1'
+#alias mount_stmp2='sshfs theiaLocal:/scratch3/NCEPDEV/stmp2 /scratch3/NCEPDEV/stmp2'
+#alias umount_stmp2='umount /scratch3/NCEPDEV/stmp2'
+#alias mount_stmp3='sshfs theiaLocal:/scratch4/NCEPDEV/stmp3 /scratch4/NCEPDEV/stmp3'
+#alias umount_stmp3='umount /scratch4/NCEPDEV/stmp3'
+#alias mount_stmp4='sshfs theiaLocal:/scratch4/NCEPDEV/stmp4 /scratch4/NCEPDEV/stmp4'
+#alias umount_stmp4='umount /scratch4/NCEPDEV/stmp4'
 
 # Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
@@ -117,16 +226,34 @@ function GitLFS-status() {
     fi
 }
 
-# Aliases in svn-repo and svn-work directories
-alias svnrep='cd ${home}/svn-repo; echopwd'
-alias svnwork='cd ${home}/svn-work; echopwd'
-alias scripts='cd ${home}/svn-work/scripts/trunk/src; echopwd'
-alias writing='cd ${home}/svn-work/writing; echopwd'
+function toggleGITprompt() {
+    if [ -z "$GIT_PROMPT_IGNORE" ]; then
+        echo "Ignore Git-Prompt"
+        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+        export GIT_PROMPT_IGNORE=1
+        return
+    fi
+    if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
+        echo "Disable Git-Prompt"
+        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+        export GIT_PROMPT_IGNORE=1
+        return
+    elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
+        echo "Enable Git-Prompt"
+        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
+        export GIT_PROMPT_IGNORE=0
+        return
+    fi
+}
 
-# Aliases for Git
+# Aliases for Git mistype and Git commands
 alias gti='git'
-alias gci='git commit'
-alias glg='git log --name-only'
+alias gs='git status'
+alias gl='git lg'
+alias gm='git merge --no-commit --no-ff'
+alias gc='git commit -m'
+alias gd='git diff'
+alias gx='git dl'
 
 # Aliases for SVN
 alias sci='svn ci'
@@ -157,9 +284,15 @@ alias ...='cd ../..'
 alias owd='pwd'
 
 # Aliases for vi, vim, gvim and their mis-typos
-# MacVim is installed using HomeBrew on a Mac
-alias vi='mvim -v'
-alias gvim='mvim -g'
+case $OSTYPE in
+    darwin* )
+        # MacVim is installed using HomeBrew on a Mac
+        alias vi='mvim -v'
+        alias gvim='mvim -g' ;;
+    linux* )
+        alias vi='vim'
+        alias gvim='gvim' ;;
+esac
 alias vim='vi'
 alias ci='vi'
 alias ci='vi'
@@ -170,14 +303,16 @@ alias gcim='gvim'
 alias givM='gvim'
 alias gciM='gvim'
 alias gviM='gvim'
+alias gvi='gvim'
 
-# Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns
-alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
-
-# Alias for xxdiff
-alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff'
+# Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns; and xxdiff
+case $OSTYPE in
+    darwin* )
+        alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+        alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+        alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
+        alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff' ;;
+esac
 
 # Alias for diff (Use colordiff)
 alias diff='colordiff'
@@ -186,9 +321,11 @@ alias diff='colordiff'
 alias psr='ps -U rmahajan'
 alias psax='ps ax | grep -v root'
 alias psssh='ps ax | grep ssh'
+alias psSort='ps -eo pcpu,pid,user,args | sort -k 1 -r | head -16'
 
 # Aliases for closing a terminal window
 alias lo='exit'
+alias eixt='exit'
 
 # Aliases for tar
 alias ltar='tar -tvf'
@@ -202,12 +339,37 @@ alias oepn='open'
 alias opne='open'
 
 # Aliases for ldd
-alias ldd='otool -L'
+case $OSTYPE
+    darwin*)
+        alias ldd='otool -L'
+esac
 
 # Aliases for tail
 alias tf='tail -f'
 
 # Aliases for module mis-typos
 alias moduel='module'
+alias moudle='module'
 
+# Aliases for AWS
+alias sshaws='/usr/bin/ssh -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
+alias scpaws='/usr/bin/scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
+
+# Aliases for wget
+case $OSTYPE in
+    darwin* )
+        alias wget='wget --no-check-certificate'
+esac
+
+# Aliases used with find
+function autofind(){ find . -name $1 -print; }
+function autofindls(){ find . -name $1 -exec ls -lhd {} \;; }
+function permit(){
+    find $1 -type d -print -exec chmod a+rx {} \;;
+    find $1 -type f -print -exec chmod a+r  {} \;;
+}
+function unpermit(){
+    find $1 -type d -print -exec chmod og-rx {} \;;
+    find $1 -type f -print -exec chmod og-r  {} \;;
+}
 ###############################################################

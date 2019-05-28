@@ -25,6 +25,7 @@ Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one
 
 call plug#end()
@@ -189,18 +190,20 @@ autocmd BufEnter *.tex map <F1> {\
 autocmd BufEnter *.tex map <F2> }
 autocmd BufEnter *.tex map <F3> {\bf
 autocmd BufEnter *.tex map <F4> {\it
+autocmd BufEnter *.tex map <leader>ll :!latexmk<cr>
 
 " html source files
 autocmd BufEnter *.htm* map <F1> <\
 autocmd BufEnter *.htm* map <F2> >
 
-set foldmethod=syntax " folding for current window (fdm)
+"set foldmethod=syntax " folding for current window (fdm)
 "set nofoldenable      " dont fold by default (nofen)
 " Help on folding:
 " To open folds use zR (all) and zr (level by level)
 " To close folds use zM (all) and zm (level by level)
 
 " Toggle between line numbers and relative line numbers
+set number
 nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
 nnoremap <silent><leader>n :exe "set " . (&rnu == 1 ? "nornu" : "rnu")<cr>
 

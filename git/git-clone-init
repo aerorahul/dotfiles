@@ -1,0 +1,24 @@
+#!/bin/bash
+
+fullname="Rahul Mahajan"
+
+email_github="aerorahul@users.noreply.github.com"
+email_noaa="rahul.mahajan@noaa.gov"
+email_nasa="rahul.mahajan@nasa.gov"
+
+case "$url" in
+  *@github.com:*          ) name="${fullname}"; email="${email_github}";;
+  *//github.com/*         ) name="${fullname}"; email="${email_github}";;
+  github:*                ) name="${fullname}"; email="${email_github}";;
+  *@vlab.ncep.noaa.gov:*  ) name="${fullname}"; email="${email_noaa}";;
+  *//vlab.ncep.noaa.gov/* ) name="${fullname}"; email="${email_noaa}";;
+  gerrit:*                ) name="${fullname}"; email="${email_noaa}";;
+  *@developer.nasa.gov:*  ) name="${fullname}"; email="${email_nasa}";;
+  *//developer.nasa.gov/* ) name="${fullname}"; email="${email_nasa}";;
+  github-nasa:*           ) name="${fullname}"; email="${email_nasa}";;
+esac
+
+unset fullname
+unset email_github
+unset email_noaa
+unset email_nasa

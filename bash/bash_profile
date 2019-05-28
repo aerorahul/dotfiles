@@ -1,6 +1,6 @@
 [ -z "$PS1" ] && return
 
-# Prompt and Color variables
+# (Git) Prompt and Color variables
 YELLOW="\[\e[1;33m\]"
 MAGENTA="\[\e[1;35m\]"
 CYAN="\[\e[1;36m\]"
@@ -18,7 +18,7 @@ export PRINTER="pissaro"
 # Display's time of history items
 export HISTTIMEFORMAT="%F %T "
 
-# Add $HOME/bin to path
+# Add CWD(.) and $HOME/bin to path
 export PATH=".:$HOME/bin:$PATH"
 
 ###############################################################
@@ -29,8 +29,8 @@ module use -a /Users/rmahajan/opt/modulefiles/apps
 
 ###############################################################
 # Git settings (completion, prompt, environments)
-. ~/.git-completion.bash
-. ~/.git-prompt.sh
+test -e "${HOME}/.git-completion.bash" && source ${HOME}/.git-completion.bash
+test -e "${HOME}/.git-prompt.bash" && source ${HOME}/.git-prompt.sh
 export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWUNTRACKEDFILES=true
@@ -38,12 +38,10 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 # Make LS look good
 export LSCOLORS="ExGxCxDxBxegedabagaced" # Good for dark background
 
-# Add my python libraries to PYTHONPATH
-#export PYTHONPATH="$PYTHONPATH:/Users/rmahajan/Work/python-utils"
+# Make LESS more attractive
+export LESS="-BFIMRX"
 
 ###############################################################
 # Set user-defined aliases
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
-
+test -e "${HOME}/.bash_aliases" && source "${HOME}/.bash_aliases"
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-
