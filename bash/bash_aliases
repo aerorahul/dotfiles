@@ -20,7 +20,7 @@ alias appropos='man -k'
 alias fman='nroff -man \!* | more -s'
 alias fme='tbl \!* | nroff -me |more -s'
 
-#	Aliases for ls
+# Aliases for ls
 case $OSTYPE in
     darwin* )
         alias ls='/bin/ls -G' ;;
@@ -37,6 +37,7 @@ alias lrt='ls -lrt'
 alias lrta='ls -lart'
 alias l1='ls -1'
 alias l1rt='ls -1rt'
+alias sl='ls'
 
 # Aliases for changing directories
 alias echopwd='echo "changing directory to ... `pwd`"'
@@ -167,12 +168,33 @@ function discover_obsdev(){
     remoteFS $action $machine $remDir $locDir
 }
 
+alias panama='ssh panama'
+alias suez='ssh suez'
+
+# Aliases for mounting/unmounting SSHFS volumes
+# S4
+alias mount_s4data="sshfs s4:/data/users/rmahajan ${HOME}/Volumes/s4/rmahajan"
+alias umount_s4data="umount ${HOME}/Volumes/s4/rmahajan"
+# Polar
+alias mount_www="sshfs polar:/www/html/intranet/personnel/rmahajan ${HOME}/Volumes/polar/www"
+alias umount_www="umount ${HOME}/Volumes/polar/www"
+# Cumulus
+alias mount_datacom="sshfs cumulus:/datacom/rmahajan ${HOME}/Volumes/datacom/rmahajan"
+alias umount_datacom="umount ${HOME}/Volumes/datacom/rmahajan"
+# Discover
+alias mount_discover_home="sshfs discover:/home/rmahajan ${HOME}/Volumes/discover/home/rmahajan"
+alias umount_discover_home="umount ${HOME}/Volumes/discover/home/rmahajan"
+alias mount_discover_nobackup="sshfs discover:/gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan"
+alias umount_discover_nobackup="umount ${HOME}/Volumes/discover/nobackup/rmahajan"
+alias mount_discover_obsdev="sshfs discover:/gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan"
+alias umount_discover_obsdev="umount ${HOME}/Volumes/discover/obsdev/rmahajan"
+
 # Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
 alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
 alias theiaLocal='sshxy -q theiaLocal'
-alias theiaVIAdorne='ssh   -q -A -t dorne       ssh -q -A theiaLocal'
-alias theiaVIAdornelocal='ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
+alias theiaVIAdorne='ssh -q -A -t dorne ssh -q -A theiaLocal'
+alias theiaVIAdornelocal='ssh -q -A -t dorne.local ssh -q -A theiaLocal'
 
 # Copy to/from Theia
 function scpToTheia() {   scp $1 theiaLocal:$2; }
@@ -328,15 +350,18 @@ alias lo='exit'
 alias eixt='exit'
 
 # Aliases for tar
-alias ltar='tar -tvf'
-alias ctar='tar -cvf'
-alias cztar='tar -czvf'
-alias xtar='tar -xvf'
-alias xztar='tar -xzvf'
+alias ltar='tar -tf'
+alias ctar='tar -cf'
+alias cztar='tar -czf'
+alias xtar='tar -xf'
+alias xztar='tar -xzf'
 
 # Aliases for open
-alias oepn='open'
-alias opne='open'
+case $OSTYPE in
+    darwin* )
+        alias oepn='open'
+        alias opne='open'
+esac
 
 # Aliases for ldd
 case $OSTYPE
@@ -350,6 +375,8 @@ alias tf='tail -f'
 # Aliases for module mis-typos
 alias moduel='module'
 alias moudle='module'
+alias lmodule='module'
+alias moduele='module'
 
 # Aliases for AWS
 alias sshaws='/usr/bin/ssh -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
@@ -372,4 +399,8 @@ function unpermit(){
     find $1 -type d -print -exec chmod og-rx {} \;;
     find $1 -type f -print -exec chmod og-r  {} \;;
 }
+
+# Aliases for AWS
+alias sshaws='/usr/bin/ssh -i ~/.ssh/rmahajan-key-pair-nova.pem'
+alias scpaws='/usr/bin/scp -i ~/.ssh/rmahajan-key-pair-nova.pem'
 ###############################################################
