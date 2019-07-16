@@ -17,7 +17,7 @@ alias rmf='rm -f'
 alias h='history'
 alias df='df -h'
 alias du='du -hs'
-#alias grep='grep --color'
+alias grep='grep --color'
 alias grpe='grep'
 
 # Aliases used with man
@@ -267,23 +267,23 @@ function toggleGITprompt() {
         echo "Ignore Git-Prompt"
         PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=1
-       #export GIT_PS1_SHOWDIRTYSTATE=false
-       #export GIT_PS1_SHOWUNTRACKEDFILES=false
+        #export GIT_PS1_SHOWDIRTYSTATE=false
+        #export GIT_PS1_SHOWUNTRACKEDFILES=false
         return
     fi
     if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
         echo "Disable Git-Prompt"
         PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=1
-       #export GIT_PS1_SHOWDIRTYSTATE=false
-       #export GIT_PS1_SHOWUNTRACKEDFILES=false
+        #export GIT_PS1_SHOWDIRTYSTATE=false
+        #export GIT_PS1_SHOWUNTRACKEDFILES=false
         return
     elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
         echo "Enable Git-Prompt"
         PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=0
-       #export GIT_PS1_SHOWDIRTYSTATE=true
-       #export GIT_PS1_SHOWUNTRACKEDFILES=true
+        #export GIT_PS1_SHOWDIRTYSTATE=true
+        #export GIT_PS1_SHOWUNTRACKEDFILES=true
         return
     fi
 }
@@ -334,7 +334,6 @@ case $OSTYPE in
         alias vi='vim'
         alias gvim='gvim' ;;
 esac
-alias vim='vi'
 alias ci='vi'
 alias ci='vi'
 alias cim='vi'
@@ -389,8 +388,8 @@ case $OSTYPE in
 esac
 
 # Aliases for ldd
-case $OSTYPE
-    darwin*)
+case $OSTYPE in
+    darwin* )
         alias ldd='otool -L'
         ;;
 esac
@@ -466,7 +465,7 @@ function extract {
 fi
 }
 
-# Make a directory and cd into it.
+# Function to make a directory and cd into it.
 mkcd () { mkdir -p $1; cd $1; }
 alias mcd='mkcd'
 alias mkd='mkcd'
