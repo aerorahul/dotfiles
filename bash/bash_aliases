@@ -60,7 +60,7 @@ alias sshxy='/usr/bin/ssh -X -Y'
 alias dornelocal='ssh dorne.local'
 alias dorne='ssh dorne'
 
-# Aliases for NCCS machines (create a tunnel with tcluster.py first)
+# Aliases for NCCS machines
 alias tdiscover='tcluster.py -m discover'
 alias nccs='sshxy nccs'
 alias discover='sshxy discover'
@@ -75,6 +75,17 @@ alias cardinal='sshxy -t s4 ssh -XY cardinal'
 alias polar='sshxy polar'
 alias thunder='sshxy thunder'
 alias cumulus='sshxy cumulus'
+
+# Aliases for NCEP/NOAA machines
+alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
+alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
+alias theiaLocal='sshxy -q theiaLocal'
+
+# Copy to/from Theia
+scpToTheia() {   scp $1 theiaLocal:$2; }
+scpFromTheia() { scp theiaLocal:$1 $2; }
+rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
+rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
 
 # Functions for mounting/unmounting SSHFS volumes
 function mountDir(){
@@ -217,18 +228,7 @@ function theia_global(){
     remoteFS $action $machine $remDir $locDir
 }
 
-# Aliases for NCEP/NOAA machines
-alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
-alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
-alias theiaLocal='sshxy -q theiaLocal'
-
-# Copy to/from Theia
-function scpToTheia() {   scp $1 theiaLocal:$2; }
-function scpFromTheia() { scp theiaLocal:$1 $2; }
-function rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
-function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
-
-# Function to toggle Git-LFS and give Status
+# Function to toggle Git-LFS
 function toggleGITLFS() {
     if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
         echo "Disable Git-LFS"
@@ -246,6 +246,7 @@ function toggleGITLFS() {
     fi
 }
 
+# Function to get Git-LFS status
 function GitLFS-status() {
     if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
         echo "Git-LFS is ON"
@@ -260,22 +261,29 @@ function GitLFS-status() {
     fi
 }
 
+# Function to toggle slow Git Prompt and give Status
 function toggleGITprompt() {
     if [ -z "$GIT_PROMPT_IGNORE" ]; then
         echo "Ignore Git-Prompt"
-        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=1
+       #export GIT_PS1_SHOWDIRTYSTATE=false
+       #export GIT_PS1_SHOWUNTRACKEDFILES=false
         return
     fi
     if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
         echo "Disable Git-Prompt"
-        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=1
+       #export GIT_PS1_SHOWDIRTYSTATE=false
+       #export GIT_PS1_SHOWUNTRACKEDFILES=false
         return
     elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
         echo "Enable Git-Prompt"
-        PS1="\! gs6101-fire ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
+        PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
         export GIT_PROMPT_IGNORE=0
+       #export GIT_PS1_SHOWDIRTYSTATE=true
+       #export GIT_PS1_SHOWUNTRACKEDFILES=true
         return
     fi
 }
@@ -297,7 +305,6 @@ alias slog='svn log'
 alias sadd='svn add'
 alias spropset='svn propset svn:keywords "Author Id Revision Date"'
 alias sup='svn up'
-alias sinfo='svn info'
 
 # Aliases and mistypes for make
 alias mkae='make'
@@ -352,7 +359,12 @@ esac
 alias diff='colordiff'
 
 # Alias for ps
-alias psr='ps -U rmahajan'
+case $OSTYPE in
+    darwin* )
+        alias psr='ps -U $USER';;
+    linux )
+        alias psr='ps -u $USER';;
+esac
 alias psax='ps ax | grep -v root'
 alias psssh='ps ax | grep ssh'
 alias psSort='ps -eo pcpu,pid,user,args | sort -k 1 -r | head -16'
@@ -373,12 +385,14 @@ case $OSTYPE in
     darwin* )
         alias oepn='open'
         alias opne='open'
+        ;;
 esac
 
 # Aliases for ldd
 case $OSTYPE
     darwin*)
         alias ldd='otool -L'
+        ;;
 esac
 
 # Aliases for tail
@@ -398,6 +412,7 @@ alias scpaws='/usr/bin/scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
 case $OSTYPE in
     darwin* )
         alias wget='wget --no-check-certificate'
+        ;;
 esac
 
 # Functions used with find
@@ -455,4 +470,12 @@ fi
 mkcd () { mkdir -p $1; cd $1; }
 alias mcd='mkcd'
 alias mkd='mkcd'
+
+# Setting up timers
+timer () {
+    echo "running a $1 minute timer starting `date`";
+    sleep $1m;
+    zenity --info --text="Time is up : `date`";
+}
+
 ###############################################################
