@@ -25,6 +25,7 @@ Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'editorconfig/editorconfig-vim'
 "Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one
 
