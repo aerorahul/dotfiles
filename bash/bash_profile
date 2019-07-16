@@ -29,6 +29,12 @@ module use -a ${OPT}/modulefiles/core
 module use -a ${OPT}/modulefiles/apps
 
 ###############################################################
+# CVS settings
+export CVS_RSH="ssh"
+export CVSROOT=":ext:${USER}@ctunnel:/cvsroot/esma"
+export CVSEDITOR=$EDITOR
+
+###############################################################
 # Git settings (completion, prompt, environments)
 test -e "${HOME}/.git-completion.bash" && source "${HOME}/.git-completion.bash"
 test -e "${HOME}/.git-prompt.sh" && source "${HOME}/.git-prompt.sh"
@@ -39,9 +45,11 @@ export GIT_PS1_SHOWUNTRACKEDFILES=true
 # Make LS look good
 export LSCOLORS="ExGxCxDxBxegedabagaced" # Good for dark background
 
-# Make LESS more fancy
-export LESS="-FMBIRX"
-unset LESSOPEN
+# Make LESS more attractive
+export LESS="-BFIMRX"
+
+# Add my python libraries to PYTHONPATH
+#export PYTHONPATH="$PYTHONPATH:/Users/rmahajan/Work/python-utils"
 
 ###############################################################
 # Set user-defined aliases

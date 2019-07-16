@@ -8,11 +8,16 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+# Aliases to force cp, mv and rm without confirmation
+alias cpf='cp -f'
+alias mvf='mv -f'
+alias rmf='rm -f'
+
 # Commonly used aliases
 alias h='history'
 alias df='df -h'
 alias du='du -hs'
-alias grep='grep --color'
+#alias grep='grep --color'
 alias grpe='grep'
 
 # Aliases used with man
@@ -71,7 +76,7 @@ alias polar='sshxy polar'
 alias thunder='sshxy thunder'
 alias cumulus='sshxy cumulus'
 
-# Aliases for mounting/unmounting SSHFS volumes
+# Functions for mounting/unmounting SSHFS volumes
 function mountDir(){
     dirName=$1
     action=$2
@@ -111,8 +116,8 @@ function remoteFS() {
         echo "Incorrect usage, ABORT!"
         echo "usage:"
         echo "remoteFS action machine remDir locDir"
-        echo "    action [mount | umount]"
-        echo "   machine [discover | s4 | cumulus | polar]"
+        echo "    action [ mount | umount | clean ]"
+        echo "   machine [ discover | cumulus | polar | s4 ]"
         echo "    remDir [/full/path/to/remote/dir]"
         echo "    locDir [/full/path/to/local/dir]"
         return 1
@@ -135,12 +140,19 @@ function polar_www(){
     remoteFS $action $machine $remDir $locDir
 }
 
+function cumulus_home(){
+    action=$1
+    machine=cumulus
+    remDir=/home/rmahajan
+    locDir=${HOME}/Volumes/cumulus/home/rmahajan
+    remoteFS $action $machine $remDir $locDir
+}
 
 function cumulus_datacom(){
     action=$1
     machine=cumulus
     remDir=/datacom/rmahajan
-    locDir=${HOME}/Volumes/datacom/rmahajan
+    locDir=${HOME}/Volumes/cumulus/datacom/rmahajan
     remoteFS $action $machine $remDir $locDir
 }
 
@@ -168,53 +180,53 @@ function discover_obsdev(){
     remoteFS $action $machine $remDir $locDir
 }
 
-alias panama='ssh panama'
-alias suez='ssh suez'
+function theia_stmp(){
+    action=$1
+    stmp=$2
+    machine=theiaLocal
+    if [ $stmp = "stmp1" | $stmp = "stmp2" ]; then
+        remDir=/scratch3/NCEPDEV/$stmp
+    elif [ $stmp = "stmp3" | $stmp = "stmp4" ]; then
+        remDir=/scratch4/NCEPDEV/$stmp
+    fi
+    locDir=${HOME}/Volumes/theia/$stmp
+    remoteFS $action $machine $remDir $locDir
+}
 
-# Aliases for mounting/unmounting SSHFS volumes
-# S4
-alias mount_s4data="sshfs s4:/data/users/rmahajan ${HOME}/Volumes/s4/rmahajan"
-alias umount_s4data="umount ${HOME}/Volumes/s4/rmahajan"
-# Polar
-alias mount_www="sshfs polar:/www/html/intranet/personnel/rmahajan ${HOME}/Volumes/polar/www"
-alias umount_www="umount ${HOME}/Volumes/polar/www"
-# Cumulus
-alias mount_datacom="sshfs cumulus:/datacom/rmahajan ${HOME}/Volumes/datacom/rmahajan"
-alias umount_datacom="umount ${HOME}/Volumes/datacom/rmahajan"
-# Discover
-alias mount_discover_home="sshfs discover:/home/rmahajan ${HOME}/Volumes/discover/home/rmahajan"
-alias umount_discover_home="umount ${HOME}/Volumes/discover/home/rmahajan"
-alias mount_discover_nobackup="sshfs discover:/gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan"
-alias umount_discover_nobackup="umount ${HOME}/Volumes/discover/nobackup/rmahajan"
-alias mount_discover_obsdev="sshfs discover:/gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan"
-alias umount_discover_obsdev="umount ${HOME}/Volumes/discover/obsdev/rmahajan"
+function theia_home(){
+    action=$1
+    machine=theiaLocal
+    remDir=/home/Rahul.Mahajan
+    locDir=${HOME}/Volumes/theia/$remDir
+    remoteFS $action $machine $remDir $locDir
+}
+
+function theia_da(){
+    action=$1
+    machine=theiaLocal
+    remDir=/scratch4/NCEPDEV/da
+    locDir=${HOME}/Volumes/theia/da
+    remoteFS $action $machine $remDir $locDir
+}
+
+function theia_global(){
+    action=$1
+    machine=theiaLocal
+    remDir=/scratch4/NCEPDEV/global
+    locDir=${HOME}/Volumes/theia/global
+    remoteFS $action $machine $remDir $locDir
+}
 
 # Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
 alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
 alias theiaLocal='sshxy -q theiaLocal'
-alias theiaVIAdorne='ssh -q -A -t dorne ssh -q -A theiaLocal'
-alias theiaVIAdornelocal='ssh -q -A -t dorne.local ssh -q -A theiaLocal'
 
 # Copy to/from Theia
 function scpToTheia() {   scp $1 theiaLocal:$2; }
 function scpFromTheia() { scp theiaLocal:$1 $2; }
 function rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
 function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
-#alias mount_theia='sshfs theiaLocal:/home/Rahul.Mahajan /home/Rahul.Mahajan'
-#alias umount_theia='umount /home/Rahul.Mahajan'
-#alias mount_tglobal='sshfs theiaLocal:/scratch4/NCEPDEV/global /scratch4/NCEPDEV/global'
-#alias umount_tglobal='umount /scratch4/NCEPDEV/global'
-#alias mount_tda='sshfs theiaLocal:/scratch4/NCEPDEV/da /scratch4/NCEPDEV/da'
-#alias umount_tda='umount /scratch4/NCEPDEV/da'
-#alias mount_stmp1='sshfs theiaLocal:/scratch3/NCEPDEV/stmp1 /scratch3/NCEPDEV/stmp1'
-#alias umount_stmp1='umount /scratch3/NCEPDEV/stmp1'
-#alias mount_stmp2='sshfs theiaLocal:/scratch3/NCEPDEV/stmp2 /scratch3/NCEPDEV/stmp2'
-#alias umount_stmp2='umount /scratch3/NCEPDEV/stmp2'
-#alias mount_stmp3='sshfs theiaLocal:/scratch4/NCEPDEV/stmp3 /scratch4/NCEPDEV/stmp3'
-#alias umount_stmp3='umount /scratch4/NCEPDEV/stmp3'
-#alias mount_stmp4='sshfs theiaLocal:/scratch4/NCEPDEV/stmp4 /scratch4/NCEPDEV/stmp4'
-#alias umount_stmp4='umount /scratch4/NCEPDEV/stmp4'
 
 # Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
@@ -388,19 +400,59 @@ case $OSTYPE in
         alias wget='wget --no-check-certificate'
 esac
 
-# Aliases used with find
-function autofind(){ find . -name $1 -print; }
-function autofindls(){ find . -name $1 -exec ls -lhd {} \;; }
-function permit(){
+# Functions used with find
+autofind () { find . -name $1 -print; }
+autofindls () { find . -name $1 -exec ls -lhd {} \;; }
+
+# Functions to give/take permissions
+permit () {
     find $1 -type d -print -exec chmod a+rx {} \;;
     find $1 -type f -print -exec chmod a+r  {} \;;
 }
-function unpermit(){
+unpermit () {
     find $1 -type d -print -exec chmod og-rx {} \;;
     find $1 -type f -print -exec chmod og-r  {} \;;
 }
 
-# Aliases for AWS
-alias sshaws='/usr/bin/ssh -i ~/.ssh/rmahajan-key-pair-nova.pem'
-alias scpaws='/usr/bin/scp -i ~/.ssh/rmahajan-key-pair-nova.pem'
+# Function to extract a compressed archive
+function extract {
+ if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+    return 1
+ else
+    for n in $@
+    do
+      if [ -f "$n" ] ; then
+          case "${n%,}" in
+            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
+                         tar xvf "$n"       ;;
+            *.lzma)      unlzma ./"$n"      ;;
+            *.bz2)       bunzip2 ./"$n"     ;;
+            *.rar)       unrar x -ad ./"$n" ;;
+            *.gz)        gunzip ./"$n"      ;;
+            *.zip)       unzip ./"$n"       ;;
+            *.z)         uncompress ./"$n"  ;;
+            *.7z|*.arj|*.cab|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.rpm|*.udf|*.wim|*.xar)
+                         7z x ./"$n"        ;;
+            *.xz)        unxz ./"$n"        ;;
+            *.exe)       cabextract ./"$n"  ;;
+            *)
+                         echo "extract: '$n' - unknown archive method"
+                         return 1
+                         ;;
+          esac
+      else
+          echo "'$n' - file does not exist"
+          return 1
+      fi
+    done
+fi
+}
+
+# Make a directory and cd into it.
+mkcd () { mkdir -p $1; cd $1; }
+alias mcd='mkcd'
+alias mkd='mkcd'
 ###############################################################
