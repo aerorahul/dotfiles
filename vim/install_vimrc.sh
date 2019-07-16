@@ -29,6 +29,7 @@ ervandew/supertab
 scrooloose/nerdtree
 airblade/vim-gitgutter
 Xuyuanp/nerdtree-git-plugin
+editorconfig/editorconfig-vim
 ryanoasis/vim-devicons
 "
 # Location of plugins
