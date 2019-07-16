@@ -1,13 +1,13 @@
 #!/bin/sh --login
 
-cd ~/
+cd ${HOME}
 
-mkdir -p ~/.vim/autoload
-cd ~/.vim/autoload
+mkdir -p ${HOME}/.vim/autoload
+cd ${HOME}/.vim/autoload
 
 # Use of plugins requires plug.vim; get the latest version
 if [ -f plug.vim ]; then
-    echo "~/.vim/plug.vim exists, OVERWRITE!"
+    echo "${HOME}/.vim/plug.vim exists, OVERWRITE!"
     cp plug.vim plug.vim.`date %Y%m%d%M%S`
 fi
 curl -fLo plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -33,12 +33,31 @@ editorconfig/editorconfig-vim
 ryanoasis/vim-devicons
 "
 # Location of plugins
-mkdir -p ~/.vim/plugged
-cd ~/.vim/plugged
+mkdir -p ${HOME}/.vim/plugged
+cd ${HOME}/.vim/plugged
 
 # Clone plugins from GitHub.com
 for plugin in $plugins; do
     git clone https://github.com/$plugin.git
 done
+
+updatescr="${HOME}/.vim/update_vimplugins.sh"
+[[ -f $updatescr ]] && rm -f $updatescr
+touch $updatescr
+cat >> $updatescr << EOF
+#!/bin/sh --login
+
+cd \${HOME}/.vim/plugged
+cwd=\$(pwd)
+
+for i in \$(ls -1); do
+    echo "Updating ... \$i"
+    cd \$i
+    git pull
+    cd \$cwd
+    echo
+done
+EOF
+chmod +x $updatescr
 
 exit 0
