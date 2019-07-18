@@ -75,11 +75,16 @@ alias cardinal='sshxy -t s4 ssh -XY cardinal'
 alias polar='sshxy polar'
 alias thunder='sshxy thunder'
 alias cumulus='sshxy cumulus'
+alias panama='sshxy panama'
+alias suez='sshxy suez'
+alias fire='sshxy fire'
 
 # Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
 alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
 alias theiaLocal='sshxy -q theiaLocal'
+alias theiaVIAdorne='ssh   -q -A -t dorne       ssh -q -A theiaLocal'
+alias theiaVIAdornelocal='ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
 
 # Copy to/from Theia
 scpToTheia() {   scp $1 theiaLocal:$2; }
