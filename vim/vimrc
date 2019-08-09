@@ -242,6 +242,9 @@ nnoremap <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
+" expand tab and retab in one go
+nnoremap <leader>rt :set expandtab \| :retab<CR>
+
 " language and spell check
 nnoremap <silent> <leader>s :set spell!<CR>
 let $LANG='en_us'
