@@ -26,6 +26,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'jiangmiao/auto-pairs'
 "Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one
 
@@ -89,6 +90,10 @@ let g:syntastic_python_flake8_args='--ignore=E101,E111,E112,E113,E114,E115,E116,
 
 " vim-supertab
 let g:SuperTabDefaultCompletionType = "<c-p>"
+
+" auto-pairs
+let g:AutoPairsFlyMode = 1
+let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 "mouse visual block (ala MS Word) must :set mouse=a
 nmap <C-LeftMouse> <LeftMouse><C-V>
