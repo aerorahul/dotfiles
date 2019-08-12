@@ -79,6 +79,19 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+" vim-gitgutter
+set updatetime=250
+let g:gitgutter_max_signs = 1000
+" No mapping
+let g:gitgutter_map_keys = 0
+" Colors
+let g:gitgutter_override_sign_column_highlight = 0
+highlight clear SignColumn
+highlight GitGutterAdd          guifg=#00ff00 ctermfg=46
+highlight GitGutterChange       guifg=#ffff00 ctermfg=11
+highlight GitGutterDelete       guifg=#ff0000 ctermfg=9
+highlight GitGutterChangeDelete guifg=#00ffff ctermfg=14
+
 " syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
