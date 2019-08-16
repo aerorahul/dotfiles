@@ -290,7 +290,7 @@ map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " vim-better-whitespace'
-autocmd FileType python,fortran,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+autocmd FileType python,fortran,c,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
 "autocmd BufEnter *.py,*.psp EnableStripWhitespaceOnSave
 "autocmd BufEnter *.f*,*.F* EnableStripWhitespaceOnSave
 "autocmd BufEnter *.*sh EnableStripWhitespaceOnSave
