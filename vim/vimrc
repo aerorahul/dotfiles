@@ -288,12 +288,12 @@ set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
 " NERDtree
 map <C-n> :NERDTreeToggle<CR>
 "open NERDTree on vim start-up
-"autocmd vimenter * NERDTree
+autocmd vimenter * NERDTree
 "close vim if NERDTree is the only thing open
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " vim-better-whitespace'
-autocmd FileType python,fortran,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+autocmd FileType python,fortran,c,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
 "autocmd BufEnter *.py,*.psp EnableStripWhitespaceOnSave
 "autocmd BufEnter *.f*,*.F* EnableStripWhitespaceOnSave
 "autocmd BufEnter *.*sh EnableStripWhitespaceOnSave
