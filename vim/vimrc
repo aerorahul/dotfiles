@@ -237,6 +237,7 @@ set cmdheight=2     " set command bar height
 set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
 set novisualbell    " turn off visual bell (novb)
 set noerrorbells    " turn off error bell or beep (noeb)
+set noeb vb t_vb=   " turn off beeping when in NORMAL mode
 
 map <F5> :!make
 
@@ -286,11 +287,13 @@ set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
 
 " NERDtree
 map <C-n> :NERDTreeToggle<CR>
-"autocmd vimenter * NERDTree " open NERDTree on vim start-up
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"open NERDTree on vim start-up
+"autocmd vimenter * NERDTree
+"close vim if NERDTree is the only thing open
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " vim-better-whitespace'
-autocmd FileType python,fortran,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+autocmd FileType python,fortran,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
 "autocmd BufEnter *.py,*.psp EnableStripWhitespaceOnSave
 "autocmd BufEnter *.f*,*.F* EnableStripWhitespaceOnSave
 "autocmd BufEnter *.*sh EnableStripWhitespaceOnSave
