@@ -78,6 +78,7 @@ alias cumulus='sshxy cumulus'
 alias panama='sshxy panama'
 alias suez='sshxy suez'
 alias fire='sshxy fire'
+alias panamaTunnel='sshxy -q -L 2222:localhost:22 panama'
 
 # Aliases for NCEP/NOAA machines
 alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
@@ -332,12 +333,19 @@ alias owd='pwd'
 # Aliases for vi, vim, gvim and their mis-typos
 case $OSTYPE in
     darwin* )
-        # MacVim is installed using HomeBrew on a Mac
-        alias vi='mvim -v'
-        alias gvim='mvim -g' ;;
+        if [ -d "/Applications/MacVim.app/Contents/bin" ]; then
+            # If MacVim installation exists, use it
+            export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
+        else
+            # Use Homebrew installation
+            alias vim="mvim -v"
+            alias gvim="mvim -g"
+        fi
+        alias vi='vim'
+        ;;
     linux* )
         alias vi='vim'
-        alias gvim='gvim' ;;
+        ;;
 esac
 alias ci='vi'
 alias ci='vi'
