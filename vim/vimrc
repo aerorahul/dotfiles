@@ -14,19 +14,22 @@ Plug 'flazz/vim-colorschemes'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tmhedberg/matchit'
-Plug 'tpope/vim-surround'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'gerw/vim-HiLinkTrace'
 Plug 'vim-scripts/visSum.vim'
 Plug 'will133/vim-dirdiff'
 Plug 'mhinz/vim-signify'
 Plug 'scrooloose/syntastic'
-Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdtree'
+Plug 'ervandew/supertab'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+"Plug 'tpope/vim-rsi'
 "Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one
 
@@ -35,6 +38,9 @@ call plug#end()
 
 filetype plugin indent on
 
+" ====================
+" GENERAL VIM SETTINGS
+" ====================
 
 syntax on
 set background=dark
@@ -54,70 +60,12 @@ if version >= 703
     "call matchadd('ColorColumn', '\%81v', 100)
 endif
 
-" vim-better-whitespace'
-highlight ExtraWhitespace ctermbg=red guibg=red
-
-" vim-airline
 set laststatus=2 " always show the last status of the file
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep='>'
-let g:airline#extensions#tabline#left_alt_sep='<'
-let g:airline_detect_modified=1
-let g:airline_symbols_ascii=1
-"let g:airline_powerline_fonts = 1 " needs powerline fonts patch
-"let g:airline#extensions#tabline#show_buffers = 1
 
-" vim-airline-themes
-let g:airline_theme = 'wombat'
-
-" vim-signify
-let g:signify_vcs_list = [ 'git', 'svn' ]
-let g:signify_disable_by_default = 1
-nnoremap <leader>gt :SignifyToggle<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-" vim-gitgutter
-set updatetime=250
-let g:gitgutter_max_signs = 1000
-" No mapping
-let g:gitgutter_map_keys = 0
-" Colors
-let g:gitgutter_override_sign_column_highlight = 0
-highlight clear SignColumn
-highlight GitGutterAdd          guifg=#00ff00 ctermfg=46
-highlight GitGutterChange       guifg=#ffff00 ctermfg=11
-highlight GitGutterDelete       guifg=#ff0000 ctermfg=9
-highlight GitGutterChangeDelete guifg=#00ffff ctermfg=14
-
-" syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_sh_shellcheck_args = "-x -e 2086,1090,1091,2126"
-let g:syntastic_python_checkers=['flake8']
-let g:syntastic_python_flake8_args='--ignore=E101,E111,E112,E113,E114,E115,E116,E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E133,E201,E202,E203,E211,E221,E222,E223,E224,E225,E226,E227,E228,E231,E241,E242,E251,E261,E262,E265,E266,E271,E272,E273,E274,E301,E302,E303,E304,E401,E402,E501,E502,E701,E702,E703,E704,E711,E712,E713,E714,E721,E731,E901,E902,W191,W291,W292,W293,W391,W503,W601,W602,W603,W604'
-
-" vim-supertab
-let g:SuperTabDefaultCompletionType = "<c-p>"
-
-" auto-pairs
-let g:AutoPairsFlyMode = 1
-let g:AutoPairsShortcutBackInsert = '<M-b>'
-
-"mouse visual block (ala MS Word) must :set mouse=a
-nmap <C-LeftMouse> <LeftMouse><C-V>
-vmap <C-LeftDrag>  <LeftDrag>
-imap <C-LeftMouse> <LeftMouse><C-O><C-V>
-vmap <C-LeftMouse> <Esc><LeftMouse><C-V>
-
-
-set tabstop=4       " no. of spaces jumped upon tab , default 8 (ts)
-set shiftwidth=4    " no. of spaces to use for each step of indent, default 8 (sw)
-set softtabstop=4   " no. of spaces that a tab counts (sts)
+set tabstop=2       " no. of spaces jumped upon tab , default 8 (ts)
+set shiftwidth=2    " no. of spaces to use for each step of indent, default 8 (sw)
+set shiftround      " round indent to multiple of shiftwidth (sr)
+set softtabstop=2   " no. of spaces that a tab counts (sts)
 set smarttab        " on tab, inserts blanks equal to shiftwidth(sta)
 set expandtab       " expand the tab to appropriate no. of spaces (et)
 
@@ -131,31 +79,202 @@ set title           " set title of window to filename
 set noinsertmode    " makes the insert mode as NOT the default mode (noim)
 
 set backspace=indent,eol,start  " Allows you to backspace over the listed character types
+set linebreak       " break at the character that extends the width and not at the last character (lbr)
+
+" Line wrapping configurations
 set whichwrap=bs    " allow <BS>/<SPACE> keys to move to previous/next lines at start/end of line(ww)
 set wrapmargin=2    " no. of characters from right margin before wrapping starts (wm)
 set wrap            " when text is longer than the width of window, text will wrap to next line
-set linebreak       " break at the character that extends the width and not at the last character (lbr)
-
 " Toggle line wrapping in normal mode:
 nmap <silent><leader>w :set nowrap!<cr>:set nowrap?<cr>
 
 set so=7            " set 7 lines to the cursor - when moving vertically
-
-set hlsearch        " highlight searches (hls)
-set incsearch       " incremental search (is)
-set ignorecase      " ignore case on searching (ic)
-set smartcase       " acts smart about cases (scs)
+set showcmd         " display incomplete commands
 set showmatch       " When a bracket is inserted, briefly jump to the matching one
 set mat=3           " How many tenths of a second to blink when matching brackets
 set updatetime=100  " update every 100ms (default is 4000ms); good for git-gutter
 
 "set listchars=tab:>-,extends:»,precedes:«,trail:•
 set listchars=tab:▸\ ,extends:»,precedes:«,trail:•,eol:¬,nbsp:_
+"set list listchars=tab:»·,trail:·,nbsp:· " display extra whitespace
 set nolist " list mode
 nmap <leader>l :set list!<CR>
 "let &showbreak=''
 
+" Statusline configurations
+set statusline=\ %f       " Path to the file
+set statusline+=\ %m      " Modified flag
+set statusline+=\ %y      " Filetype
+set statusline+=%=        " Switch to the right side
+set statusline+=%l        " current line
+set statusline+=/%L       " Total lines
+set statusline+=%{FugitiveStatusline()}
+"set statusline+=\ -\ %{ALEGetStatusLine()}\
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+" Search / Substitute related configurations
+set hlsearch        " highlight searches (hls)
+set incsearch       " incremental search (is)
+set ignorecase      " ignore case on searching (ic)
+set smartcase       " acts smart about cases (scs)
+nnoremap <leader>sub :%s///g<left><left>
+vnoremap <leader>sub :s///g<left><left>
+
+" Folding configurations
+" ======================
+"set foldmethod=syntax " folding for current window (fdm)
+"set nofoldenable      " dont fold by default (nofen)
+"set foldlevel=999
+" Help on folding:
+" To open folds use zR (all) and zr (level by level)
+" To close folds use zM (all) and zm (level by level)
+
+" Numbering configurations
+" ========================
+" Display relative line numbers, with absolute line number for current line
+set number
+set numberwidth=5
+set relativenumber
+" Toggle between line numbers and relative line numbers
+nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
+nnoremap <silent><leader>n :exe "set " . (&rnu == 1 ? "nornu" : "rnu")<cr>
+map + :se nu<CR>
+map _ :se nonu<CR>
+
+" language and spell check
+" ========================
+nnoremap <silent> <leader>s :set spell!<CR>
+let $LANG='en_us'
+set dictionary=/usr/bin/dict/ " specify the location of dictionary directory (dict)
+set langmenu=en_us
+set spelllang=en_us
+
+set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
+
+set ruler           " bottom line showing location of cursor (ru)
+set cmdheight=2     " set command bar height
+set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
+set novisualbell    " turn off visual bell (novb)
+set noerrorbells    " turn off error bell or beep (noeb)
+set noeb vb t_vb=   " turn off beeping when in NORMAL mode
+
+set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
+
+set wildmode=list:full " completion mode used with character specified with wildchar (wim)
+set wildchar=<TAB>     " character to type to start wildcard expansion in command line (wc)
+set wildmenu           " enable completion upon <Tab> (wmnu)
+set wildignore=*.o,*.mod,*~,*.pyc   " ignore filetypes
+set wildignore+=.git\*,.hg\*,.svn\* " also ignore version control files
+
+" ===============
+" PLUGIN SETTINGS
+" ===============
+
+" vim-better-whitespace
+" =====================
+highlight ExtraWhitespace ctermbg=red guibg=red
+nnoremap <leader>wht :StripWhitespace<cr>:w<cr>
+autocmd FileType python,fortran,c,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep='>'
+let g:airline#extensions#tabline#left_alt_sep='<'
+let g:airline_detect_modified=1
+let g:airline_symbols_ascii=1
+"let g:airline_powerline_fonts = 1 " needs powerline fonts patch
+"let g:airline#extensions#tabline#show_buffers = 1
+
+" vim-airline-themes
+" ==================
+let g:airline_theme = 'wombat'
+
+" vim-signify
+" ===========
+let g:signify_vcs_list = [ 'git', 'svn' ]
+let g:signify_disable_by_default = 1
+nnoremap <leader>gt :SignifyToggle<CR>
+
+" vim-gitgutter
+" =============
+let g:gitgutter_max_signs = 1000
+" No mapping
+let g:gitgutter_map_keys = 0
+" Colors
+let g:gitgutter_override_sign_column_highlight = 0
+highlight clear SignColumn
+highlight GitGutterAdd          guifg=#00ff00 ctermfg=46
+highlight GitGutterChange       guifg=#ffff00 ctermfg=11
+highlight GitGutterDelete       guifg=#ff0000 ctermfg=9
+highlight GitGutterChangeDelete guifg=#00ffff ctermfg=14
+
+" syntastic
+" =========
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_sh_shellcheck_args = "-x -e 2086,1090,1091,2126"
+let g:syntastic_python_checkers=['flake8']
+let g:syntastic_python_flake8_args='--ignore=E101,E111,E112,E113,E114,E115,E116,E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E133,E201,E202,E203,E211,E221,E222,E223,E224,E225,E226,E227,E228,E231,E241,E242,E251,E261,E262,E265,E266,E271,E272,E273,E274,E301,E302,E303,E304,E401,E402,E501,E502,E701,E702,E703,E704,E711,E712,E713,E714,E721,E731,E901,E902,W191,W291,W292,W293,W391,W503,W601,W602,W603,W604'
+
+" vim-supertab
+" ============
+let g:SuperTabDefaultCompletionType = "<c-p>"
+
+" auto-pairs
+" ==========
+let g:AutoPairsFlyMode = 1
+let g:AutoPairsShortcutBackInsert = '<M-b>'
+
+" NERDtree
+" ========
+map <C-n> :NERDTreeToggle<CR>
+"autocmd vimenter * NERDTree "open NERDTree on vim start-up
+"close vim if NERDTree is the only thing open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" ========
+" MAPPINGS
+" ========
+"
+"mouse visual block (ala MS Word) must :set mouse=a
+nmap <C-LeftMouse> <LeftMouse><C-V>
+vmap <C-LeftDrag>  <LeftDrag>
+imap <C-LeftMouse> <LeftMouse><C-O><C-V>
+vmap <C-LeftMouse> <Esc><LeftMouse><C-V>
+
 " edit compressed files
+" key mappings
+"map 1 :1
+map q :q!
+map  :w
+map $ :$
+map <C-BS> X
+
+nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
+" expand tab and retab in one go
+nnoremap <leader>rt :set expandtab \| :retab<CR>
+
+" maps to open and source vimrc
+nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
+vnoremap . .gv
+
+" =========
+" GROUPINGS
+" =========
+
 augroup gzip
     autocmd!
     autocmd BufReadPre,FileReadPre     *.gz set bin
@@ -193,110 +312,12 @@ autocmd BufRead *.f*,*.F* let fortran_free_source=1
 autocmd BufRead *.f*,*.F* let fortran_do_enddo=1
 autocmd BufRead *.f*,*.F* let fortran_fold=0
 
-" c programs and header files
-"autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r set formatoptions=crql
-"autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r set formatoptions=tcq
-"autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r set comments=sr:/*,mb:*,el:*/,://
-"autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r set comments=sr:/*,mb:*,el:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-"autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F1> :!man <cword><CR><CR>
-"autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F2> mpI/* <ESC>A */<ESC>`pj
-"autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F3> mp^3x$xxx`pj
-"autocmd BufEnter *.l,*.y,?akefile*,*.c,*.cc,*.h,*.r map <F4> :!ctags -t *.{c,C,cc,h}<CR>
-"autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F1>
-"autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F2>
-"autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F3>
-"autocmd BufLeave *.l,*.y,?akefile*,*.c,*.cc,*.h,*.r unmap <F4>
-
 " tex & latex source files
 autocmd BufEnter *.tex map <F1> {\
 autocmd BufEnter *.tex map <F2> }
 autocmd BufEnter *.tex map <F3> {\bf
 autocmd BufEnter *.tex map <F4> {\it
 autocmd BufEnter *.tex map <leader>ll :!latexmk<cr>
-
-" html source files
-autocmd BufEnter *.htm* map <F1> <\
-autocmd BufEnter *.htm* map <F2> >
-
-"set foldmethod=syntax " folding for current window (fdm)
-"set nofoldenable      " dont fold by default (nofen)
-" Help on folding:
-" To open folds use zR (all) and zr (level by level)
-" To close folds use zM (all) and zm (level by level)
-
-" Toggle between line numbers and relative line numbers
-set number
-nnoremap <silent><leader>nu :exe "set " . (&nu == 1 ? "nonu" : "nu")<cr>
-nnoremap <silent><leader>n :exe "set " . (&rnu == 1 ? "nornu" : "rnu")<cr>
-
-set dictionary=/usr/bin/dict/ " specify the location of dictionary directory (dict)
-set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
-
-set ruler           " bottom line showing location of cursor (ru)
-set cmdheight=2     " set command bar height
-set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
-set novisualbell    " turn off visual bell (novb)
-set noerrorbells    " turn off error bell or beep (noeb)
-set noeb vb t_vb=   " turn off beeping when in NORMAL mode
-
-map <F5> :!make
-
-" key mappings
-"map 1 :1
-map q :q!
-map  :w
-map $ :$
-map + :se nu<CR>
-map _ :se nonu<CR>
-map <C-BS> X
-
-
-nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
-
-" expand tab and retab in one go
-nnoremap <leader>rt :set expandtab \| :retab<CR>
-
-" language and spell check
-nnoremap <silent> <leader>s :set spell!<CR>
-let $LANG='en_us'
-set langmenu=en_us
-set spelllang=en_us
-
-set wildmode=list:full " completion mode used with character specified with wildchar (wim)
-set wildchar=<TAB>     " character to type to start wildcard expansion in command line (wc)
-set wildmenu           " enable completion upon <Tab> (wmnu)
-set wildignore=*.o,*.mod,*~,*.pyc " ignore filetypes
-set wildignore+=.git\*,.hg\*,.svn\* " also ignore version control files
-
-" maps to open and source vimrc
-nnoremap <leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" expand tab and retab in one go
-nnoremap <leader>rt :set expandtab \| :retab<CR>
-
-" visual shifting (does not exit Visual mode)
-vnoremap < <gv
-vnoremap > >gv
-vnoremap . .gv
-
-set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
-
-" NERDtree
-map <C-n> :NERDTreeToggle<CR>
-"open NERDTree on vim start-up
-autocmd vimenter * NERDTree
-"close vim if NERDTree is the only thing open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" vim-better-whitespace'
-autocmd FileType python,fortran,c,cpp,bash,ksh,csh,tcsh autocmd BufEnter <buffer> EnableStripWhitespaceOnSave
-"autocmd BufEnter *.py,*.psp EnableStripWhitespaceOnSave
-"autocmd BufEnter *.f*,*.F* EnableStripWhitespaceOnSave
-"autocmd BufEnter *.*sh EnableStripWhitespaceOnSave
 
 " Make VIM remember position in file after reopen
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

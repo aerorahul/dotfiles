@@ -18,21 +18,26 @@ flazz/vim-colorschemes
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 tmhedberg/matchit
-tpope/vim-surround
 ntpeters/vim-better-whitespace
 gerw/vim-HiLinkTrace
 vim-scripts/visSum.vim
 will133/vim-dirdiff
 mhinz/vim-signify
 scrooloose/syntastic
-ervandew/supertab
 scrooloose/nerdtree
+ervandew/supertab
 airblade/vim-gitgutter
 Xuyuanp/nerdtree-git-plugin
 editorconfig/editorconfig-vim
 jiangmiao/auto-pairs
+tpope/vim-surround
+tpope/vim-fugitive
+tpope/vim-repeat
+tpope/vim-rsi
+vim-latex/vim-latex
 ryanoasis/vim-devicons
 "
+
 # Location of plugins
 mkdir -p ${HOME}/.vim/plugged
 cd ${HOME}/.vim/plugged
@@ -60,5 +65,13 @@ for i in \$(ls -1); do
 done
 EOF
 chmod +x $updatescr
+
+echo "========================================"
+echo "========================================"
+echo "Don't forget to enable plugins by doing:"
+echo "vi ~/.vimrc"
+echo ":PlugInstall"
+echo "========================================"
+echo "========================================"
 
 exit 0
