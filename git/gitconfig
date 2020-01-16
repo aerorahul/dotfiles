@@ -7,8 +7,8 @@
     hooksPath = ~/.git/hooks
 [sendemail]
     smtpencryption = tls
-    smtpserver = smtp02.ndc.nasa.gov
-    smtpuser = rahul.mahajan@nasa.gov
+    smtpserver = smtp.gmail.com
+    smtpuser = aerorahul@gmail.com
     smtppass = password
     smtpserverport = 587
 [web]
@@ -268,7 +268,7 @@
 [help]
     autocorrect = 1
 [credential]
-    helper = cache --timeout=3600
+    helper = cache --timeout=86400
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f

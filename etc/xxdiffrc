@@ -1,0 +1,11 @@
+Geometry: 1800x1200
+FontText: "Monaco,18,-1,5,50,0,0,0,0,0"
+Color.InsertBlank.Back: "#a7eda5"
+Color.Same.Back: "#ffffff"
+Color.SameBlank.Back: "#ffffff"
+DirDiffRecursive: True
+HideCarriageReturns: True
+IgnoreHorizontalWhitespace: True
+Show.LineNumbers: True
+TabWidth: 4
+Command.DiffFiles2: "diff -b -w -B"
