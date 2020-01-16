@@ -1,0 +1,18 @@
+set diffprogram /Applications/xxdiff.app/Contents/MacOS/xxdiff
+set showprogram /Applications/MacVim.app/Contents/MacOS/MacVim
+set rcsflag {}
+set diffiflag {}
+set diffwflag {}
+set diffbflag {}
+set diffBflag {}
+set diffdflag {}
+set ctxlines 3
+set showsame 0
+set underlinetabs 0
+set redisp_immed 1
+set diffnewfirst 0
+set nukefiles {*.o *.mod *~ *.orig CVS *.a *.link *.old *.save .depend .*.flags SCCS .git/* *.swp}
+set filelistfont {Monaco -16}
+set textfont {Courier -16}
+set nxdirmode 0
+set docvsignore 1

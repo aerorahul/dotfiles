@@ -25,7 +25,7 @@ alias appropos='man -k'
 alias fman='nroff -man \!* | more -s'
 alias fme='tbl \!* | nroff -me |more -s'
 
-# Aliases for ls
+#	Aliases for ls
 case $OSTYPE in
     darwin* )
         alias ls='/bin/ls -G' ;;
@@ -60,7 +60,7 @@ alias sshxy='/usr/bin/ssh -X -Y'
 alias dornelocal='ssh dorne.local'
 alias dorne='ssh dorne'
 
-# Aliases for NCCS machines
+# Aliases for NCCS machines (create a tunnel with tcluster.py first)
 alias tdiscover='tcluster.py -m discover'
 alias nccs='sshxy nccs'
 alias discover='sshxy discover'
@@ -75,25 +75,8 @@ alias cardinal='sshxy -t s4 ssh -XY cardinal'
 alias polar='sshxy polar'
 alias thunder='sshxy thunder'
 alias cumulus='sshxy cumulus'
-alias panama='sshxy panama'
-alias suez='sshxy suez'
-alias fire='sshxy fire'
-alias panamaTunnel='sshxy -q -L 2222:localhost:22 panama'
 
-# Aliases for NCEP/NOAA machines
-alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
-alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
-alias theiaLocal='sshxy -q theiaLocal'
-alias theiaVIAdorne='ssh   -q -A -t dorne       ssh -q -A theiaLocal'
-alias theiaVIAdornelocal='ssh   -q -A -t dorne.local ssh -q -A theiaLocal'
-
-# Copy to/from Theia
-scpToTheia() {   scp $1 theiaLocal:$2; }
-scpFromTheia() { scp theiaLocal:$1 $2; }
-rsyncToTheia() {   rsync -auvx --progress $1 theiaLocal:$2; }
-rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
-
-# Functions for mounting/unmounting SSHFS volumes
+# Funcitons for mounting/unmounting SSHFS volumes
 function mountDir(){
     dirName=$1
     action=$2
@@ -135,8 +118,8 @@ function remoteFS() {
         echo "remoteFS action machine remDir locDir"
         echo "    action [ mount | umount | clean ]"
         echo "   machine [ discover | cumulus | polar | s4 ]"
-        echo "    remDir [/full/path/to/remote/dir]"
-        echo "    locDir [/full/path/to/local/dir]"
+        echo "    remDir [ /full/path/to/remote/dir ]"
+        echo "    locDir [ /full/path/to/local/dir ]"
         return 1
     fi
 }
@@ -234,7 +217,25 @@ function theia_global(){
     remoteFS $action $machine $remDir $locDir
 }
 
-# Function to toggle Git-LFS
+# Aliases for Theia/Hera
+alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
+alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
+alias theiaLocal='sshxy -q theiaLocal'
+alias heraTunnel='sshxy -q -L 45545:localhost:45545 hera'
+alias herabTunnel='sshxy -q -L 45545:localhost:45545 heraBoulder'
+alias heraLocal='sshxy -q heraLocal'
+
+# Copy to/from Theia/Hera
+function scpToTheia() { scp $1 theiaLocal:$2; }
+function scpFromTheia() { scp theiaLocal:$1 $2; }
+function rsyncToTheia() { rsync -auvx --progress $1 theiaLocal:$2; }
+function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
+function scpToHera() { scp $1 heraLocal:$2; }
+function scpFromHera() { scp heraLocal:$1 $2; }
+function rsyncToHera() { rsync -auvx --progress $1 heraLocal:$2; }
+function rsyncFromHera() { rsync -auvx --progress heraLocal:$1 $2; }
+
+# Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
     if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
         echo "Disable Git-LFS"
@@ -252,7 +253,6 @@ function toggleGITLFS() {
     fi
 }
 
-# Function to get Git-LFS status
 function GitLFS-status() {
     if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
         echo "Git-LFS is ON"
@@ -267,7 +267,6 @@ function GitLFS-status() {
     fi
 }
 
-# Function to toggle slow Git Prompt and give Status
 function toggleGITprompt() {
     if [ -z "$GIT_PROMPT_IGNORE" ]; then
         echo "Ignore Git-Prompt"
@@ -347,6 +346,7 @@ case $OSTYPE in
         alias vi='vim'
         ;;
 esac
+alias vim='vi'
 alias ci='vi'
 alias ci='vi'
 alias cim='vi'
@@ -395,15 +395,15 @@ alias xztar='tar -xzf'
 # Aliases for open
 case $OSTYPE in
     darwin* )
-        alias oepn='open'
-        alias opne='open'
+alias oepn='open'
+alias opne='open'
         ;;
 esac
 
 # Aliases for ldd
 case $OSTYPE in
     darwin* )
-        alias ldd='otool -L'
+alias ldd='otool -L'
         ;;
 esac
 
@@ -423,7 +423,7 @@ alias scpaws='/usr/bin/scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
 # Aliases for wget
 case $OSTYPE in
     darwin* )
-        alias wget='wget --no-check-certificate'
+alias wget='wget --no-check-certificate'
         ;;
 esac
 

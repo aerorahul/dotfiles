@@ -1,24 +1,19 @@
 #!/bin/bash
 
-fullname="Rahul Mahajan"
+fullname_="Rahul Mahajan"
 
-email_github="aerorahul@users.noreply.github.com"
-email_noaa="rahul.mahajan@noaa.gov"
-email_nasa="rahul.mahajan@nasa.gov"
+emailGitHub_="aerorahul@users.noreply.github.com"
+emailNOAA_="rahul.mahajan@noaa.gov"
 
 case "$url" in
-  *@github.com:*          ) name="${fullname}"; email="${email_github}";;
-  *//github.com/*         ) name="${fullname}"; email="${email_github}";;
-  github:*                ) name="${fullname}"; email="${email_github}";;
-  *@vlab.ncep.noaa.gov:*  ) name="${fullname}"; email="${email_noaa}";;
-  *//vlab.ncep.noaa.gov/* ) name="${fullname}"; email="${email_noaa}";;
-  gerrit:*                ) name="${fullname}"; email="${email_noaa}";;
-  *@developer.nasa.gov:*  ) name="${fullname}"; email="${email_nasa}";;
-  *//developer.nasa.gov/* ) name="${fullname}"; email="${email_nasa}";;
-  github-nasa:*           ) name="${fullname}"; email="${email_nasa}";;
+  github:*                ) name="${fullname_}"; email="${emailGitHub_}";;
+  *@github.com:*          ) name="${fullname_}"; email="${emailGitHub_}";;
+  *//github.com/*         ) name="${fullname_}"; email="${emailGitHub_}";;
+  gerrit:*                ) name="${fullname_}"; email="${emailNOAA_}";;
+  *@vlab.ncep.noaa.gov:*  ) name="${fullname_}"; email="${emailNOAA_}";;
+  *//vlab.ncep.noaa.gov/* ) name="${fullname_}"; email="${emailNOAA_}";;
 esac
 
-unset fullname
-unset email_github
-unset email_noaa
-unset email_nasa
+unset fullname_
+unset emailGitHub_
+unset emailNOAA_
