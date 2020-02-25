@@ -134,8 +134,27 @@
     #lg = log --oneline --graph --decorate
     #lgno = log --oneline --graph --decorate --name-only
     #lgns = log --oneline --graph --decorate --name-status
-    lg = log --color --graph --pretty=format:'%C(yellow)%h%Creset -%C(bold cyan)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --abbrev-commit
-    today = lg --since=midnight
+    lg = log --graph --pretty=format:'%C(yellow)%h%Creset \
+        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
+            --abbrev-commit --date=short --date-order
+    lgno = log --graph --pretty=format:'%C(yellow)%h%Creset \
+        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
+            --abbrev-commit --date=short --date-order --name-only
+    lgns = log --graph --pretty=format:'%C(yellow)%h%Creset \
+        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
+            --abbrev-commit --date=short --date-order --name-status
+    last = log -1 HEAD
+    today = log --since=midnight --color --graph \
+            --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)[%an]%Creset' \
+        --abbrev-commit
+    yesterday = log --since yesterday --until=midnight --color --graph \
+            --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)[%an]%Creset' \
+            --abbrev-commit
+    history = log --graph --pretty=format:'%C(yellow)%h%Creset \
+            -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' \
+            --abbrev-commit --date=short --date-order -n30
+    #############
+    ls = ls-files
     lsf = !git ls-files | grep -i
     #############
     m = merge
@@ -276,3 +295,14 @@
     required = true
 [http]
     sslverify = false
+[url "https://github.com/"]
+    insteadOf = git://github.com/
+    insteadOf = git@github.com:
+    insteadOf = github:
+    insteadOf = gh:
+[url "https://github.com/jcsda/"]
+    insteadOf = jcsdagh:
+[url "https://github.com/aerorahul/"]
+    insteadOf = mygh:
+[url "https://github.com/NOAA-EMC/"]
+    insteadOf = emcgh:
