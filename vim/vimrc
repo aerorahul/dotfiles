@@ -48,7 +48,12 @@ set cursorline
 set t_Co=256
 colorscheme xoria256
 if has("gui_running")
-    set guifont=Monaco:h15
+    if has("unix")
+        set guifont=Monospace\ 11
+    endif
+    if has("macunix")
+        set guifont=Monaco:h15
+    endif
     set lines=80
     set columns=100
 endif
@@ -156,9 +161,9 @@ set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
 set ruler           " bottom line showing location of cursor (ru)
 set cmdheight=2     " set command bar height
 set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
+set noeb vb t_vb=   " turn off beeping when in NORMAL mode
 set novisualbell    " turn off visual bell (novb)
 set noerrorbells    " turn off error bell or beep (noeb)
-set noeb vb t_vb=   " turn off beeping when in NORMAL mode
 
 set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
 
