@@ -134,25 +134,14 @@
     #lg = log --oneline --graph --decorate
     #lgno = log --oneline --graph --decorate --name-only
     #lgns = log --oneline --graph --decorate --name-status
-    lg = log --graph --pretty=format:'%C(yellow)%h%Creset \
-        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
-            --abbrev-commit --date=short --date-order
-    lgno = log --graph --pretty=format:'%C(yellow)%h%Creset \
-        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
-            --abbrev-commit --date=short --date-order --name-only
-    lgns = log --graph --pretty=format:'%C(yellow)%h%Creset \
-        -%C(yellow)%d%Creset %Cgreen%ad (%ar) %C(bold blue)<%aN>%Creset %s' \
-            --abbrev-commit --date=short --date-order --name-status
+    lg = log --graph --abbrev-commit --date=short --date-order \
+             --pretty=format:'%C(yellow)%h%Creset - %Cgreen%>(10)%ad (%ar) %C(bold blue)%<(7)<%aN>%Cred%d %Creset%s'
+    lgno = lg --name-only
+    lgno = lg --name-status
     last = log -1 HEAD
-    today = log --since=midnight --color --graph \
-            --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)[%an]%Creset' \
-        --abbrev-commit
-    yesterday = log --since yesterday --until=midnight --color --graph \
-            --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)[%an]%Creset' \
-            --abbrev-commit
-    history = log --graph --pretty=format:'%C(yellow)%h%Creset \
-            -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' \
-            --abbrev-commit --date=short --date-order -n30
+    today = lg --since=midnight
+    yesterday = lg --since yesterday --until=midnight
+    history = lg -n30
     #############
     ls = ls-files
     lsf = !git ls-files | grep -i
