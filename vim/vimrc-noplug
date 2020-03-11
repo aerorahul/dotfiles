@@ -1,0 +1,173 @@
+syntax on           " turn syntax highlighting on
+
+set nocompatible    " use Vim defaults, prevents previous vim version bugs
+set cpoptions=ces$  " compatible options (cpo)
+set shortmess=at    " avoid all |hit-enter| prompts caused by file messages (shm)
+set magic           " special characters, always keep on
+set title           " set title of window to filename
+set noinsertmode    " makes the insert mode as NOT the default mode (noim)
+set splitright      " when on splitting, put window on right (spr)
+set nobackup        " does not create backup each time a file is created/edited (nobk)
+
+set paste           " ability to copy and paste
+
+set mouse=a         " enable the use of mouse
+
+set tabstop=4       " no. of spaces jumped upon tab , default 8 (ts)
+set shiftwidth=4    " no. of spaces to use for each step of indent, default 8 (sw)
+set softtabstop=4   " no. of spaces that a tab counts (sts)
+set smarttab        " on tab, inserts blanks equal to shiftwidth(sta)
+set expandtab       " expand the tab to appropriate no. of spaces (et)
+set backspace=2     " influences <BS>/<DEL> in insert mode (indent,eol,start) == (0,1,2)
+
+set cindent         " (cin)
+set autoindent      " use current lines indent level to next line (ai)
+set smartindent     " intelligent guess of the new line indent    (si)
+
+set ruler           " bottom line showing location of cursor (ru)
+set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
+set showmatch       " paranthesis match (sm)
+
+set whichwrap=bs    " allow <BS>/<SPACE> keys to move to previous/next lines at start/end of line(ww)
+set wrapmargin=2    " no. of characters from right margin before wrapping starts (wm)
+set wrap            " when text is longer than the width of window, text will wrap to next line
+set linebreak       " break at the character that extends the width and not at the last character (lbr)
+
+set dictionary=/usr/bin/dict/ " specify the location of dictionary directory (dict)
+set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
+
+set novisualbell    " turn off visual bell (novb)
+set noerrorbells    " turn off error bell or beep (noeb)
+
+set hlsearch        " highlight searches (hls)
+set incsearch       " incremental search (is)
+set ignorecase      " ignore case on searching (ic)
+set smartcase       " acts smart about cases (scs)
+
+set joinspaces      " Insert 2 spaces after a '.', '?', '!'. Otherwise 1 space (js)
+
+set laststatus=1    " shows the status line [0,1,2] == [never,if 2 or more windows present,always] (ls)
+set report=0        " threshold for reporting no of lines changed
+set showcmd         " show partial command in last line of screen (sc)
+set nomodeline      " (noml)
+
+set shell=/bin/bash " name of shell to use for '!' commands (sh)
+
+set linespace=1     " no. of pixel lines between characters (lsp)
+set textwidth=100   " maximum width of text to be inserted (tw)
+set autowrite       " write contents of the file, if modified (aw)
+set helpheight=10   " minimal height of the help window, when :help is invoked (hh)
+
+set wildmode=list:full " completion mode used with character specified with wildchar (wim)
+set wildchar=<TAB>     " character to type to start wildcard expansion in command line (wc)
+
+set printdevice=motley " Set default printer destination (pdev)
+
+set clipboard+=unnamed
+
+if has("terminfo")
+    set t_Co=8
+    set t_Sf=[3%p1%dm
+    set t_Sb=[4%p1%dm
+else
+    set t_Co=8
+    set t_Sf=[3%dm
+    set t_Sb=[4%dm
+endif
+
+" key mappings
+"map 1 :1
+map q :q!
+map  :w
+map $ :$
+map + :se nu<CR>
+map _ :se nonu<CR>
+map <C-BS> X
+map <C-c> "+y<CR>
+
+" handle additional buffers
+map!  <ESC>:w!<CR>a
+map <F5> :b1<CR>
+map <F6> :b2<CR>
+map <F7> :b3<CR>
+map <F8> :b4<CR>
+
+" edit compressed files
+augroup gzip
+    autocmd!
+    autocmd BufReadPre,FileReadPre     *.gz set bin
+    autocmd BufReadPost,FileReadPost   *.gz '[,']!gunzip
+    autocmd BufReadPost,FileReadPost   *.gz set nobin
+    autocmd BufReadPost,FileReadPost   *.gz execute ":doautocmd BufReadPost " . expand("%:r")
+    autocmd BufWritePost,FileWritePost *.gz !mv <afile> <afile>:r
+    autocmd BufWritePost,FileWritePost *.gz !gzip <afile>:r
+    autocmd FileAppendPre              *.gz !gunzip <afile>
+    autocmd FileAppendPre              *.gz !mv <afile>:r <afile>
+    autocmd FileAppendPost             *.gz !mv <afile> <afile>:r
+    autocmd FileAppendPost             *.gz !gzip <afile>:r
+augroup END
+
+" perl programs
+autocmd BufEnter *.pl set syntax=perl
+autocmd BufEnter *.pl set ai si cin formatoptions=croql
+autocmd BufLeave *.pl set nosi nocin formatoptions=tcq
+autocmd BufEnter *.pl set comments=b:#
+autocmd BufLeave *.pl set comments=sr:/*,mb:*,el:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+
+" python programs
+autocmd BufEnter *.py,*.psp set syntax=python
+autocmd BufRead  *.py,*.psp set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead  *.py,*.psp inoremap # X#
+autocmd BufRead  *.py,*.psp set tabstop=4
+autocmd BufRead  *.py,*.psp set shiftwidth=4
+autocmd BufRead  *.py,*.psp set softtabstop=4
+autocmd BufRead  *.py,*.psp highlight BadWhitespace ctermbg=red guibg=red
+autocmd BufRead  *.py,*.psp match BadWhitespace /^\t\+/
+autocmd BufRead  *.py,*.psp match BadWhitespace /\s\+$/
+
+" fortran programs
+autocmd BufRead *.f*,*.F* let fortran_have_tabs=1
+autocmd BufRead *.f*,*.F* set tabstop=3
+autocmd BufRead *.f*,*.F* set shiftwidth=3
+autocmd BufRead *.f*,*.F* set softtabstop=3
+
+" matlab programs
+autocmd BufEnter *.m set syntax=matlab
+
+" c programs and header files
+autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r set formatoptions=crql
+autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r set formatoptions=tcq
+autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r set comments=sr:/*,mb:*,el:*/,://
+autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r set comments=sr:/*,mb:*,el:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F1> :!man <cword><CR><CR>
+autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F2> mpI/* <ESC>A */<ESC>`pj
+autocmd BufEnter *.l,*.y,*.c,*.cc,*.h,*.r map <F3> mp^3x$xxx`pj
+autocmd BufEnter *.l,*.y,?akefile*,*.c,*.cc,*.h,*.r map <F4> :!ctags -t *.{c,C,cc,h}<CR>
+autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F1>
+autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F2>
+autocmd BufLeave *.l,*.y,*.c,*.cc,*.h,*.r unmap <F3>
+autocmd BufLeave *.l,*.y,?akefile*,*.c,*.cc,*.h,*.r unmap <F4>
+
+" tex & latex source files
+autocmd BufEnter *.tex map <F1> {\
+autocmd BufEnter *.tex map <F2> }
+autocmd BufEnter *.tex map <F3> {\bf
+autocmd BufEnter *.tex map <F4> {\it
+
+" html source files
+autocmd BufEnter *.htm* map <F1> <\
+autocmd BufEnter *.htm* map <F2> >
+
+" ncl files
+autocmd BufEnter *.ncl set syntax=ncl
+
+" look and feel of gui
+highlight StatusLine  term=bold,reverse cterm=bold,reverse ctermfg=white ctermbg=black
+if has("gui_running")
+    set guifont=Monospace\ 11  " use this font and fontsize
+    set lines=60               " height = 90 lines
+    set columns=110            " width  = 110 columns
+    highlight normal guibg=white guifg=black
+else
+    set background=dark
+endif
