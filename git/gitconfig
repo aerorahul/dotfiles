@@ -275,8 +275,8 @@
     human = name-rev --name-only --refs=refs/heads/*
 [help]
     autocorrect = 1
-[credential]
-    helper = cache --timeout=86400
+[credential "https://github.com"]
+    helper = store --file ~/.git-credentials
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
