@@ -1,5 +1,10 @@
 #!/bin/sh --login
 
+datestr=`date %Y%m%d%M%S`
+
+[[ -f $HOME/.vimrc ]] mv $HOME/.vimrc $HOME.vimrc-$datestr
+cp vimrc $HOME/.vimrc
+
 cd ${HOME}
 
 mkdir -p ${HOME}/.vim/autoload

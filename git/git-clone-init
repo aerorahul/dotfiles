@@ -1,7 +1,6 @@
 #!/bin/bash
 
 fullname_="Rahul Mahajan"
-
 emailGitHub_="aerorahul@users.noreply.github.com"
 emailNOAA_="rahul.mahajan@noaa.gov"
 
@@ -9,6 +8,7 @@ case "$url" in
   github:*                ) name="${fullname_}"; email="${emailGitHub_}";;
   *@github.com:*          ) name="${fullname_}"; email="${emailGitHub_}";;
   *//github.com/*         ) name="${fullname_}"; email="${emailGitHub_}";;
+  *gh*:*                  ) name="${fullname_}"; email="${emailGitHub_}";;
   gerrit:*                ) name="${fullname_}"; email="${emailNOAA_}";;
   *@vlab.ncep.noaa.gov:*  ) name="${fullname_}"; email="${emailNOAA_}";;
   *//vlab.ncep.noaa.gov/* ) name="${fullname_}"; email="${emailNOAA_}";;
