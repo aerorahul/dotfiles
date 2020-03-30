@@ -80,23 +80,23 @@ alias herabTunnel='sshxy -q -L 45545:localhost:45545 heraBoulder'
 alias heraLocal='sshxy -q heraLocal'
 
 # Copy to/from Theia/Hera (uses functions)
-alias scpToHera="scpTo heraLocal $1 $2"
-alias scpFromHera="scpFrom heraLocal $1 $2"
-alias rsyncToHera="rsyncTo heraLocal $1 $2"
-alias rsyncFromHera="rsyncFrom heraLocal $1 $2"
+function scpToHera() { scpTo heraLocal $1 $2; }
+function scpFromHera() { scpFrom heraLocal $1 $2; }
+function rsyncToHera() { rsyncTo heraLocal $1 $2; }
+function rsyncFromHera() { rsyncFrom heraLocal $1 $2; }
 
 # Mount/Unmount remote directories (uses functions)
-alias s4_data="remoteFS $1 s4 /data/users/rmahajan ${HOME}/Volumes/s4/rmahajan"
-alias discover_home="remoteFS $1 discover /home/rmahajan ${HOME}/Volumes/discover/rmahajan"
-alias discover_nobackup="remoteFS $1 discover /gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan"
-alias discover_obsdev="remoteFS $1 discover /gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan"
-alias hera_home="remoteFS $1 hera /home/Rahul.Mahajan ${HOME}/Volumes/hera/home/Rahul.Mahajan"
-alias hera_da="remoteFS $1 hera /scratch1/NCEPDEV/da/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/da/Rahul.Mahajan"
-alias hera_global="remoteFS $1 hera /scratch1/NCEPDEV/global/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/global/Rahul.Mahajan"
-alias hera_stmp1="remoteFS $1 hera /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp1/Rahul.Mahajan"
-alias hera_stmp2="remoteFS $1 hera /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp2/Rahul.Mahajan"
-alias hera_stmp3="remoteFS $1 hera /scratch2/NCEPDEV/stmp3/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp3/Rahul.Mahajan"
-alias hera_stmp4="remoteFS $1 hera /scratch2/NCEPDEV/stmp4/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp4/Rahul.Mahajan"
+function s4_data() { remoteFS $1 s4 /data/users/rmahajan ${HOME}/Volumes/s4/rmahajan; }
+function discover_home() { remoteFS $1 discover /home/rmahajan ${HOME}/Volumes/discover/rmahajan; }
+function discover_nobackup() { remoteFS $1 discover /gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan; }
+function discover_obsdev() { remoteFS $1 discover /gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan; }
+function hera_home() { remoteFS $1 heraLocal /home/Rahul.Mahajan ${HOME}/Volumes/hera/home/Rahul.Mahajan; }
+function hera_da() { remoteFS $1 heraLocal /scratch1/NCEPDEV/da/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/da/Rahul.Mahajan; }
+function hera_global() { remoteFS $1 heraLocal /scratch1/NCEPDEV/global/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/global/Rahul.Mahajan; }
+function hera_stmp1() { remoteFS $1 heraLocal /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp1/Rahul.Mahajan; }
+function hera_stmp2() { remoteFS $1 heraLocal /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp2/Rahul.Mahajan; }
+function hera_stmp3() { remoteFS $1 heraLocal /scratch2/NCEPDEV/stmp3/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp3/Rahul.Mahajan; }
+function hera_stmp4() { remoteFS $1 heraLocal /scratch2/NCEPDEV/stmp4/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp4/Rahul.Mahajan; }
 
 # Aliases for Git mistype and Git commands
 alias gti='git'
