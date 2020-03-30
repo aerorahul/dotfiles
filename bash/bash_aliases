@@ -1,4 +1,8 @@
 ###############################################################
+# Source user-defined functions
+test -e "${HOME}/.bash_functions" && source "${HOME}/.bash_functions"
+
+###############################################################
 # Set user-defined aliases
 
 # Aliases to make sure that the copy, move, and remove programs
@@ -62,236 +66,37 @@ alias dorne='ssh dorne'
 
 # Aliases for NCCS machines (create a tunnel with tcluster.py first)
 alias tdiscover='tcluster.py -m discover'
-alias nccs='sshxy nccs'
 alias discover='sshxy discover'
-alias dirac='sshxy dirac'
-alias tcvsacl='tcluster.py -m cvsacl'
 
 # Aliases for SSEC machines
 alias s4='sshxy s4'
 alias cardinal='sshxy -t s4 ssh -XY cardinal'
 
-# Aliases for GMAO machines
-alias polar='sshxy polar'
-alias thunder='sshxy thunder'
-alias cumulus='sshxy cumulus'
-
-# Funcitons for mounting/unmounting SSHFS volumes
-function mountDir(){
-    dirName=$1
-    action=$2
-    if [ -d $dirName ]; then
-        if [ $action = "mk" ]; then
-            echo "$dirName exists, use it!"
-            return 1
-        elif [ $action = "rm" ]; then
-            rmdir $dirName
-        else
-            echo "mountDir: unknown action '$action', ABORT!"
-        fi
-    else
-        if [ $action = "mk" ]; then
-            mkdir -p $dirName
-        elif [ $action = "rm" ]; then
-            echo "$dirName does not exist!"
-            return 1
-        else
-            echo "mountDir: unknown action '$action', ABORT!"
-        fi
-    fi
-}
-
-function remoteFS() {
-    action=$1
-    machine=$2
-    remDir=$3
-    locDir=$4
-    if [ $action = "mount" ]; then
-        mountDir $locDir "mk" && sshfs $machine:$remDir $locDir
-    elif [ $action = "umount" ]; then
-        umount $locDir && mountDir $locDir "rm"
-    elif [ $action = "clean" ]; then
-        mountDir $locDir "rm"
-    else
-        echo "Incorrect usage, ABORT!"
-        echo "usage:"
-        echo "remoteFS action machine remDir locDir"
-        echo "    action [ mount | umount | clean ]"
-        echo "   machine [ discover | cumulus | polar | s4 ]"
-        echo "    remDir [ /full/path/to/remote/dir ]"
-        echo "    locDir [ /full/path/to/local/dir ]"
-        return 1
-    fi
-}
-
-function s4_data(){
-    action=$1
-    machine=s4
-    remDir=/data/users/rmahajan
-    locDir=${HOME}/Volumes/s4/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function polar_www(){
-    action=$1
-    machine=polar
-    remDir=/www/html/intranet/personnel/rmahajan
-    locDir=${HOME}/Volumes/polar/www
-    remoteFS $action $machine $remDir $locDir
-}
-
-function cumulus_home(){
-    action=$1
-    machine=cumulus
-    remDir=/home/rmahajan
-    locDir=${HOME}/Volumes/cumulus/home/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function cumulus_datacom(){
-    action=$1
-    machine=cumulus
-    remDir=/datacom/rmahajan
-    locDir=${HOME}/Volumes/cumulus/datacom/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function discover_home(){
-    action=$1
-    machine=discover
-    remDir=/home/rmahajan
-    locDir=${HOME}/Volumes/discover/home/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function discover_nobackup(){
-    action=$1
-    machine=discover
-    remDir=/gpfsm/dnb02/rmahajan
-    locDir=${HOME}/Volumes/discover/nobackup/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function discover_obsdev(){
-    action=$1
-    machine=discover
-    remDir=/gpfsm/dnb04/projects/p72/rmahajan
-    locDir=${HOME}/Volumes/discover/obsdev/rmahajan
-    remoteFS $action $machine $remDir $locDir
-}
-
-function theia_stmp(){
-    action=$1
-    stmp=$2
-    machine=theiaLocal
-    if [ $stmp = "stmp1" | $stmp = "stmp2" ]; then
-        remDir=/scratch3/NCEPDEV/$stmp
-    elif [ $stmp = "stmp3" | $stmp = "stmp4" ]; then
-        remDir=/scratch4/NCEPDEV/$stmp
-    fi
-    locDir=${HOME}/Volumes/theia/$stmp
-    remoteFS $action $machine $remDir $locDir
-}
-
-function theia_home(){
-    action=$1
-    machine=theiaLocal
-    remDir=/home/Rahul.Mahajan
-    locDir=${HOME}/Volumes/theia/$remDir
-    remoteFS $action $machine $remDir $locDir
-}
-
-function theia_da(){
-    action=$1
-    machine=theiaLocal
-    remDir=/scratch4/NCEPDEV/da
-    locDir=${HOME}/Volumes/theia/da
-    remoteFS $action $machine $remDir $locDir
-}
-
-function theia_global(){
-    action=$1
-    machine=theiaLocal
-    remDir=/scratch4/NCEPDEV/global
-    locDir=${HOME}/Volumes/theia/global
-    remoteFS $action $machine $remDir $locDir
-}
-
 # Aliases for Theia/Hera
-alias theiaTunnel='sshxy -q -L 45545:localhost:45545 theia'
-alias theiabTunnel='sshxy -q -L 45545:localhost:45545 theiaBoulder'
-alias theiaLocal='sshxy -q theiaLocal'
+alias jetTunnel='sshxy -q -L 11845:localhost:11845 jet'
+alias jetLocal='sshxy -q jetLocal'
 alias heraTunnel='sshxy -q -L 45545:localhost:45545 hera'
 alias herabTunnel='sshxy -q -L 45545:localhost:45545 heraBoulder'
 alias heraLocal='sshxy -q heraLocal'
 
-# Copy to/from Theia/Hera
-function scpToTheia() { scp $1 theiaLocal:$2; }
-function scpFromTheia() { scp theiaLocal:$1 $2; }
-function rsyncToTheia() { rsync -auvx --progress $1 theiaLocal:$2; }
-function rsyncFromTheia() { rsync -auvx --progress theiaLocal:$1 $2; }
-function scpToHera() { scp $1 heraLocal:$2; }
-function scpFromHera() { scp heraLocal:$1 $2; }
-function rsyncToHera() { rsync -auvx --progress $1 heraLocal:$2; }
-function rsyncFromHera() { rsync -auvx --progress heraLocal:$1 $2; }
+# Copy to/from Theia/Hera (uses functions)
+alias scpToHera="scpTo heraLocal $1 $2"
+alias scpFromHera="scpFrom heraLocal $1 $2"
+alias rsyncToHera="rsyncTo heraLocal $1 $2"
+alias rsyncFromHera="rsyncFrom heraLocal $1 $2"
 
-# Function to toggle Git-LFS and give Status
-function toggleGITLFS() {
-    if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
-        echo "Disable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=1
-        return
-    fi
-    if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
-        echo "Disable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=1
-        return
-    elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
-        echo "Enable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=0
-        return
-    fi
-}
-
-function GitLFS-status() {
-    if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
-        echo "Git-LFS is ON"
-        return
-    fi
-    if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
-        echo "Git-LFS is ON"
-        return
-    elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
-        echo "Git-LFS is OFF"
-        return
-    fi
-}
-
-function toggleGITprompt() {
-    if [ -z "$GIT_PROMPT_IGNORE" ]; then
-        echo "Ignore Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=1
-        #export GIT_PS1_SHOWDIRTYSTATE=false
-        #export GIT_PS1_SHOWUNTRACKEDFILES=false
-        return
-    fi
-    if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
-        echo "Disable Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=1
-        #export GIT_PS1_SHOWDIRTYSTATE=false
-        #export GIT_PS1_SHOWUNTRACKEDFILES=false
-        return
-    elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
-        echo "Enable Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=0
-        #export GIT_PS1_SHOWDIRTYSTATE=true
-        #export GIT_PS1_SHOWUNTRACKEDFILES=true
-        return
-    fi
-}
+# Mount/Unmount remote directories (uses functions)
+alias s4_data="remoteFS $1 s4 /data/users/rmahajan ${HOME}/Volumes/s4/rmahajan"
+alias discover_home="remoteFS $1 discover /home/rmahajan ${HOME}/Volumes/discover/rmahajan"
+alias discover_nobackup="remoteFS $1 discover /gpfsm/dnb02/rmahajan ${HOME}/Volumes/discover/nobackup/rmahajan"
+alias discover_obsdev="remoteFS $1 discover /gpfsm/dnb04/projects/p72/rmahajan ${HOME}/Volumes/discover/obsdev/rmahajan"
+alias hera_home="remoteFS $1 hera /home/Rahul.Mahajan ${HOME}/Volumes/hera/home/Rahul.Mahajan"
+alias hera_da="remoteFS $1 hera /scratch1/NCEPDEV/da/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/da/Rahul.Mahajan"
+alias hera_global="remoteFS $1 hera /scratch1/NCEPDEV/global/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/global/Rahul.Mahajan"
+alias hera_stmp1="remoteFS $1 hera /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp1/Rahul.Mahajan"
+alias hera_stmp2="remoteFS $1 hera /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp2/Rahul.Mahajan"
+alias hera_stmp3="remoteFS $1 hera /scratch2/NCEPDEV/stmp3/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp3/Rahul.Mahajan"
+alias hera_stmp4="remoteFS $1 hera /scratch2/NCEPDEV/stmp4/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp4/Rahul.Mahajan"
 
 # Aliases for Git mistype and Git commands
 alias gti='git'
@@ -328,6 +133,9 @@ alias xs='cd'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias owd='pwd'
+alias mcd='mkcd'
+alias mkd='mkcd'
+
 
 # Aliases for vi, vim, gvim and their mis-typos
 case $OSTYPE in
@@ -364,7 +172,8 @@ case $OSTYPE in
         alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
         alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
         alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
-        alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff' ;;
+        alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff'
+        ;;
 esac
 
 # Alias for diff (Use colordiff)
@@ -395,15 +204,15 @@ alias xztar='tar -xzf'
 # Aliases for open
 case $OSTYPE in
     darwin* )
-alias oepn='open'
-alias opne='open'
+        alias oepn='open'
+        alias opne='open'
         ;;
 esac
 
 # Aliases for ldd
 case $OSTYPE in
     darwin* )
-alias ldd='otool -L'
+        alias ldd='otool -L'
         ;;
 esac
 
@@ -417,77 +226,14 @@ alias lmodule='module'
 alias moduele='module'
 
 # Aliases for AWS
-alias sshaws='/usr/bin/ssh -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
-alias scpaws='/usr/bin/scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
+alias sshaws='ssh -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
+alias scpaws='scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
 
 # Aliases for wget
 case $OSTYPE in
     darwin* )
-alias wget='wget --no-check-certificate'
+        alias wget='wget --no-check-certificate'
         ;;
 esac
-
-# Functions used with find
-autofind () { find . -name $1 -print; }
-autofindls () { find . -name $1 -exec ls -lhd {} \;; }
-
-# Functions to give/take permissions
-permit () {
-    find $1 -type d -print -exec chmod a+rx {} \;;
-    find $1 -type f -print -exec chmod a+r  {} \;;
-}
-unpermit () {
-    find $1 -type d -print -exec chmod og-rx {} \;;
-    find $1 -type f -print -exec chmod og-r  {} \;;
-}
-
-# Function to extract a compressed archive
-function extract {
- if [ -z "$1" ]; then
-    # display usage if no parameters given
-    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
-    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
-    return 1
- else
-    for n in $@
-    do
-      if [ -f "$n" ] ; then
-          case "${n%,}" in
-            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
-                         tar xvf "$n"       ;;
-            *.lzma)      unlzma ./"$n"      ;;
-            *.bz2)       bunzip2 ./"$n"     ;;
-            *.rar)       unrar x -ad ./"$n" ;;
-            *.gz)        gunzip ./"$n"      ;;
-            *.zip)       unzip ./"$n"       ;;
-            *.z)         uncompress ./"$n"  ;;
-            *.7z|*.arj|*.cab|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.rpm|*.udf|*.wim|*.xar)
-                         7z x ./"$n"        ;;
-            *.xz)        unxz ./"$n"        ;;
-            *.exe)       cabextract ./"$n"  ;;
-            *)
-                         echo "extract: '$n' - unknown archive method"
-                         return 1
-                         ;;
-          esac
-      else
-          echo "'$n' - file does not exist"
-          return 1
-      fi
-    done
-fi
-}
-
-# Function to make a directory and cd into it.
-mkcd () { mkdir -p $1; cd $1; }
-alias mcd='mkcd'
-alias mkd='mkcd'
-
-# Setting up timers
-timer () {
-    echo "running a $1 minute timer starting `date`";
-    sleep $1m;
-    zenity --info --text="Time is up : `date`";
-}
 
 ###############################################################
