@@ -182,11 +182,12 @@ alias diff='colordiff'
 # Alias for ps
 case $OSTYPE in
     darwin* )
-        alias psr='ps -U $USER';;
+        alias psr='ps -U $USER -f';;
     linux )
-        alias psr='ps -u $USER';;
+        alias psr='ps -u $USER -f';;
 esac
 alias psax='ps ax | grep -v root'
+alias psax='ps axo USER:20,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm'
 alias psssh='ps ax | grep ssh'
 alias psSort='ps -eo pcpu,pid,user,args | sort -k 1 -r | head -16'
 
