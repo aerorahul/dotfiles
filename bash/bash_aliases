@@ -65,12 +65,12 @@ alias dornelocal='ssh dorne.local'
 alias dorne='ssh dorne'
 
 # Aliases for NCCS machines (create a tunnel with tcluster.py first)
-alias tdiscover='tcluster.py -m discover'
+alias tdiscover='tcluster -m discover'
 alias discover='sshxy discover'
 
 # Aliases for SSEC machines
 alias s4='sshxy s4'
-alias cardinal='sshxy -t s4 ssh -XY cardinal'
+alias s4-submit='sshxy -t s4 ssh -XY s4-submit'
 
 # Aliases for Theia/Hera
 alias jetTunnel='sshxy -q -L 11845:localhost:11845 jet'
@@ -154,7 +154,6 @@ case $OSTYPE in
         alias vi='vim'
         ;;
 esac
-alias vim='vi'
 alias ci='vi'
 alias ci='vi'
 alias cim='vi'
@@ -183,7 +182,7 @@ alias diff='colordiff'
 case $OSTYPE in
     darwin* )
         alias psr='ps -U $USER -f';;
-    linux )
+    linux* )
         alias psr='ps -u $USER -f';;
 esac
 alias psax='ps ax | grep -v root'

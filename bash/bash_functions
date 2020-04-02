@@ -51,9 +51,9 @@ function remoteFS() {
 
 # scp/rsync To/From
 function scpTo() { remote=$1; localFile=$2; remoteFile=$3; scp $localFile $remote:$remoteFile; }
-function scpFrom() { remote=$1; localFile=$2; remoteFile=$3; scp $remote:$remoteFile $localFile; }
+function scpFrom() { remote=$1; remoteFile=$2; localFile=$3; scp $remote:$remoteFile $localFile; }
 function rsyncTo() { remote=$1; localFile=$2; remoteFile=$3; rsync -auvx --progress $localFile $remote:$remoteFile; }
-function rsyncFrom() { remote=$1; localFile=$2; remoteFile=$3; rsync -auvx --progress $remote:$remoteFile $localFile; }
+function rsyncFrom() { remote=$1; remoteFile=$2; localFile=$3; rsync -auvx --progress $remote:$remoteFile $localFile; }
 
 # Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
