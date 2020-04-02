@@ -2,12 +2,10 @@
 
 datestr=`date +"%Y%m%d"`
 
-[[ -d $HOME/.git ]] && mv $HOME/.git $HOME/.git-$datestr
-cp -R git $HOME/.git
-
 files="
-git-clone-init
-gitconfig
+bash_profile
+bash_aliases
+bash_functions
 "
 for file in $files; do
   [[ -f $HOME/.$file ]] && mv $HOME/.$file $HOME/.$file-$datestr
