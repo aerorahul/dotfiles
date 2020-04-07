@@ -47,6 +47,7 @@ alias lrta='ls -lart'
 alias l1='ls -1'
 alias l1rt='ls -1rt'
 alias sl='ls'
+alias tree='tree -C' # show colored output
 
 # Aliases for changing directories
 alias echopwd='echo "changing directory to ... `pwd`"'
@@ -60,8 +61,13 @@ alias sshx='/usr/bin/ssh -X'
 alias sshy='/usr/bin/ssh -Y'
 alias sshxy='/usr/bin/ssh -X -Y'
 
-# Aliases for westeros's machines; See ~/.ssh/config for settings
-alias dornelocal='ssh dorne.local'
+# Aliases for NCEP machines
+alias emc='sshxy emc'
+alias tdevwcoss='tcluster -m devwcoss'
+alias tprodwcoss='tcluster -m prodwcoss'
+alias devwcoss='ssh devwcoss'
+alias prodwcoss='ssh prodwcoss'
+v
 alias dorne='ssh dorne'
 
 # Aliases for NCCS machines (create a tunnel with tcluster.py first)

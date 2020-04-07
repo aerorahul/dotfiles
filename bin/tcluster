@@ -4,14 +4,14 @@
 # tcluster - open/close/restart a tunnel to cluster machines
 ###############################################################
 
+import sys
 import os
 import subprocess as sp
 from shlex import split
 from getpass import getuser
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+import click
 
-
-clusters = ['discover', 'orion', 'devwcoss', 'prodwcoss', 'cheyenne']
+clusters = ['discover', 'orion', 's4', 's4-submit', 'devwcoss', 'prodwcoss', 'cheyenne']
 
 
 class Tunnel(object):
@@ -19,7 +19,7 @@ class Tunnel(object):
     def __init__(self, machine):
 
         self.machine = machine
-        self.__checkStatus()
+        self.__checkStatus
 
     def __str__(self):
         pass
@@ -33,11 +33,10 @@ class Tunnel(object):
         if self.__plist:
             for pid in self.__plist:
                 status = True
-
         return status
 
+    @property
     def __checkStatus(self):
-
         try:
             proc1 = sp.Popen(split('ps x'), stdout=sp.PIPE)
             proc2 = sp.Popen(split('grep -e "-YMNfq %s"' % self.machine),
@@ -46,14 +45,12 @@ class Tunnel(object):
                              stdin=proc2.stdout, stdout=sp.PIPE, stderr=sp.PIPE)
             proc4 = sp.Popen(split('awk "{print $1}"'),
                              stdin=proc3.stdout, stdout=sp.PIPE, stderr=sp.PIPE)
-
             proc1.stdout.close()
             proc2.stdout.close()
             proc3.stdout.close()
             o, e = proc4.communicate()
         except:
-            print("An exception occurred in checkStatus")
-            raise SystemExit()
+            raise SystemExit("An exception occurred in checkStatus")
 
         plist = []
         if o:
@@ -64,23 +61,19 @@ class Tunnel(object):
                 plist = lines[:-1]
 
         self.__plist = plist
-
         return
 
     @property
     def create(self):
-
-        self.__rmMasterFile()
+        self.__rmMasterFile
         try:
-            sp.call(['ssh', '-YMNfq', '%s' % self.machine])
+            sp.call(['ssh', '-YMNfq', f'{self.machine}'])
         except:
             raise OSError(f"tunnel to {self.machine} was not created")
-
         return
 
     @property
     def close(self):
-
         print(f"closing tunnel to {self.machine}")
         if self.__plist:
             for pid in self.__plist:
@@ -91,19 +84,16 @@ class Tunnel(object):
             self.__rmMasterFile
         else:
             print(f"No tunnels open to {self.machine}")
-
         return
 
     @property
     def list(self):
-
         if self.__plist:
             for pid in self.__plist:
                 print(
                     f"Tunnel to {self.machine} is running as process id {pid}")
         else:
             print(f"No tunnels open to {self.machine}")
-
         return
 
     @property
@@ -122,42 +112,32 @@ class Tunnel(object):
         return
 
 
-def main():
+@click.command()
+@click.option('--machine', '-m', required=True, type=click.Choice(clusters))
+@click.option('--list', '-l', 'list_', required=False, is_flag=True, show_default=True, help='list open tunnels')
+@click.option('--restart', '-r', required=False, is_flag=True, show_default=True, help='restart open tunnels')
+@click.option('--kill', '-k', required=False, is_flag=True, show_default=True, help='close open tunnels')
+@click.option('--clean', '-c', required=False, is_flag=True, show_default=True, help='close and clean open tunnels')
+def main(machine, list_, restart, kill, clean):
 
-    parser = ArgumentParser(description='Open / close / list tunnels to cluster machines',
-                            formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-m', '--machine', help='machine name',
-                        type=str, required=True, choices=clusters)
-    parser.add_argument('-r', '--restart', help='restart existing tunnel',
-                        action='store_true', required=False)
-    parser.add_argument('-k', '--kill',   help='close existing tunnel',
-                        action='store_true', required=False)
-    parser.add_argument('-l', '--list',   help='list all open tunnels',
-                        action='store_true', required=False)
-    parser.add_argument('-c', '--clean',   help='clean tunnel socket',
-                        action='store_true', required=False)
-    args = parser.parse_args()
+    tmachine = Tunnel(machine)
 
-    tmachine = Tunnel(args.machine)
-
-    if args.list:
+    if list_:
         tmachine.list
-        return
 
-    if args.kill or args.clean or args.restart:
+    if kill or clean or restart:
         tmachine.close
-        if args.restart:
-            tmachine.create
+
+    if list_ or kill or clean:
         return
 
     if tmachine.isOpen:
-        print(f"Tunnel to {machine} is already open, use it!")
-        raise SystemExit()
+        raise SystemExit(f"Tunnel to {machine} is already open, use it!")
 
     tmachine.create
+    tmachine.list
 
     return
-
 
 if __name__ == "__main__":
     main()

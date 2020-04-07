@@ -10,10 +10,10 @@ PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
 export EDITOR="vim"
 
 # Default mail reply to
-export REPLYTO="rahul.mahajan@nasa.gov"
+export REPLYTO="rahul.mahajan@noaa.gov"
 
-# Default printer (pissaro, motley)
-export PRINTER="pissaro"
+# Default printer
+#export PRINTER=""
 
 # Display's time of history items
 export HISTTIMEFORMAT="%F %T "
@@ -23,16 +23,10 @@ export PATH=".:$HOME/bin:$PATH"
 
 ###############################################################
 # Initialize LMOD for modules
-. /usr/local/opt/lmod/init/bash
-export OPT=${HOME}/opt
-module use -a ${OPT}/modulefiles/core
-module use -a ${OPT}/modulefiles/apps
-
-###############################################################
-# CVS settings
-export CVS_RSH="ssh"
-export CVSROOT=":ext:${USER}@ctunnel:/cvsroot/esma"
-export CVSEDITOR=$EDITOR
+#. /usr/local/opt/lmod/init/bash
+#export OPT=${HOME}/opt
+#module use -a ${OPT}/modulefiles/core
+#module use -a ${OPT}/modulefiles/apps
 
 ###############################################################
 # Git settings (completion, prompt, environments)
@@ -47,9 +41,6 @@ export LSCOLORS="ExGxCxDxBxegedabagaced" # Good for dark background
 
 # Make LESS more attractive
 export LESS="-BFIMRX"
-
-# Add my python libraries to PYTHONPATH
-#export PYTHONPATH="$PYTHONPATH:/Users/rmahajan/Work/python-utils"
 
 ###############################################################
 # Set user-defined aliases
