@@ -291,3 +291,5 @@
   insteadOf = mygh:
 [url "https://github.com/NOAA-EMC/"]
   insteadOf = emcgh:
+[init]
+  templatedir = ~/.git
