@@ -67,7 +67,8 @@ alias tdevwcoss='tcluster -m devwcoss'
 alias tprodwcoss='tcluster -m prodwcoss'
 alias devwcoss='ssh devwcoss'
 alias prodwcoss='ssh prodwcoss'
-v
+
+# Aliases for westeros machines
 alias dorne='ssh dorne'
 
 # Aliases for NCCS machines (create a tunnel with tcluster.py first)

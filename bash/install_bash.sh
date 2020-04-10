@@ -20,6 +20,6 @@ git-completion.bash
 "
 for file in $files; do
   [[ -f $HOME/.$file ]] && mv $HOME/.$file $HOME/.$file-$datestr
-  wget $url/$file $HOME/.$file
+  wget $url/$file && mv $file $HOME/.$file
 done
 exit 0

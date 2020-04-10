@@ -47,3 +47,7 @@ export LESS="-BFIMRX"
 test -e "${HOME}/.bash_aliases" && source "${HOME}/.bash_aliases"
 test -e "$(brew --prefix)/etc/bash_completion" && source "$(brew --prefix)/etc/bash_completion"
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+###############################################################
+# Set site specific aliases and functions
+test -e "${HOME}/.bash_site" && source "${HOME}/.bash_site"
