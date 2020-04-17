@@ -12,8 +12,7 @@ def detect_defaults():
 
     defs = {}
 
-    # wcoss
-    if os.path.isdir("/nwprod"):
+    if os.path.isdir("/nwprod"):  # wcoss
         defs['machine'] = 'wcoss'
         defs['queues'] = ['debug', 'debug2', 'dev',
                           'dev2', 'transfer', 'predev', 'predev2']
@@ -21,8 +20,7 @@ def detect_defaults():
         defs['npe_node_max'] = 24
         defs['scheduler'] = 'lsf'
 
-    # hera
-    elif os.path.isdir("/scratch1"):
+    elif os.path.isdir("/scratch1"):  # hera
         defs['machine'] = 'hera'
         defs['queues'] = ['debug', 'batch', 'urgent', 'windfall',
                           'fgedebug', 'fgebatch']
@@ -31,8 +29,7 @@ def detect_defaults():
         defs['npe_node_max'] = 40
         defs['scheduler'] = 'slurm'
 
-    # discover
-    elif os.path.isdir("/discover"):
+    elif os.path.isdir("/discover"):  # discover
         defs['machine'] = 'discover'
         defs['queues'] = ['debug', 'inter']
         defs['accounts'] = ['g0613', 's0818', 'gmaoint', 'm2val', 'j1068']
@@ -113,12 +110,7 @@ def submit_interactive_job(PBS):
 
     if PBS.verbose:
         print(cmd)
-
-    try:
-        subprocess.run(cmd, shell=True, check=True)
-    except subprocess.CalledProceessError as err:
-        print(f"Error requesting an interactive job")
-        raise SystemExit(err)
+    os.system(cmd)
 
     return
 
