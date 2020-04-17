@@ -20,6 +20,14 @@ def detect_defaults():
         defs['npe_node_max'] = 24
         defs['scheduler'] = 'lsf'
 
+    if os.path.isdir("/work"):  # orion
+        defs['machine'] = 'orion'
+        defs['queues'] = ['debug', 'urgent', 'batch', 'windfall', 'novel']
+        defs['accounts'] = ['da-cpu', 'fv3-cpu']
+        defs['partitions'] = ['orion', 'debug', 'bigmem', 'service']
+        defs['npe_node_max'] = 40
+        defs['scheduler'] = 'slurm'
+
     elif os.path.isdir("/scratch1"):  # hera
         defs['machine'] = 'hera'
         defs['queues'] = ['debug', 'batch', 'urgent', 'windfall',
@@ -57,7 +65,12 @@ def check_input_arguments(PBS):
             msg = f"Queue {PBS.queue} on {PBS.machine} does not allow more than 30 minutes of walltime, ABORT!"
             raise SystemExit(msg)
         elif PBS.queue in ['bigmem'] and PBS.nodes > 6:
-            msg = f'Queue {PBS.queue} on hera does not support more than 6 nodes, ABORT!'
+            msg = f'Queue {PBS.queue} on {PBS.machine} does not support more than 6 nodes, ABORT!'
+            raise SystemExit(msg)
+
+    elif PBS.machine in ['orion']:
+        if PBS.queue in ['debug'] and wseconds > 30*60:
+            msg = f"Queue {PBS.queue} on {PBS.machine} does not allow more than 30 minutes of walltime, ABORT!"
             raise SystemExit(msg)
 
     elif PBS.machine in ['discover']:
@@ -74,19 +87,26 @@ def submit_interactive_job(PBS):
     PBS.nodes = inodes+1 if inodes*PBS.ppn < PBS.nproc else inodes
     PBS.nproc = PBS.nodes * PBS.ppn
 
-    if PBS.machine in ['hera']:
+    if PBS.scheduler in ['slurm']:
         PBS.X = '--x11' if PBS.enable_x else ''
         PBS.mail = '--mail-type BEGIN --mail-user %s' % PBS.mailto if PBS.alert else ''
-        PBS.partition = 'hera'
 
-    elif PBS.machine in ['discover']:
-        PBS.X = ''
-        PBS.mail = '--mail-type BEGIN --mail-user %s' % PBS.mailto if PBS.alert else ''
-        PBS.partition = 'compute'
-
-    elif PBS.machine in ['wcoss']:
+    elif PBS.scheduler in ['lsf']:
         PBS.X = '-XF' if PBS.enable_x else ''
         PBS.mail = '-B -u %s' % PBS.mailto if PBS.alert else ''
+
+    if PBS.machine in ['hera']:
+        PBS.partition = 'hera'
+
+    elif PBS.machine in ['orion']:
+        PBS.partition = 'debug' if PBS.queue in ['debug'] else 'orion'
+
+    elif PBS.machine in ['discover']:
+        PBS.partition = 'compute'
+        PBS.X = ''
+
+    elif PBS.machine in ['wcoss']:
+        PBS.X = ''
 
     check_input_arguments(PBS)
 
