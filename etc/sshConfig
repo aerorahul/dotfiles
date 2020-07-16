@@ -1,138 +1,46 @@
 Host gaea
-    User Rahul.Mahajan
-    #HostName gaea-rsa.rdhpcs.noaa.gov
-    HostName gaea-rsa.princeton.rdhpcs.noaa.gov
-    RemoteForward 20545 localhost:22
-    NoHostAuthenticationForLocalhost yes
-
-Host dtn-theia
-    User Rahul.Mahajan
-    HostName dtn-theia.fairmont.rdhpcs.noaa.gov
-
-Host theia
-    User Rahul.Mahajan
-    HostName theia-rsa.princeton.rdhpcs.noaa.gov
-
-Host theiaBoulder
-    User Rahul.Mahajan
-    HostName theia-rsa.rdhpcs.noaa.gov
-
-Host theiaLocal
-    User Rahul.Mahajan
-    HostName localhost
-    Port 45545
+  User Rahul.Mahajan
+  #HostName gaea-rsa.rdhpcs.noaa.gov
+  HostName gaea-rsa.princeton.rdhpcs.noaa.gov
+  RemoteForward 20545 localhost:22
+  NoHostAuthenticationForLocalhost yes
 
 Host dtn-hera
-    User Rahul.Mahajan
-    HostName dtn-hera.fairmont.rdhpcs.noaa.gov
+  User Rahul.Mahajan
+  HostName dtn-hera.fairmont.rdhpcs.noaa.gov
 
 Host hera
-    User Rahul.Mahajan
-    HostName hera-rsa.princeton.rdhpcs.noaa.gov
+  User Rahul.Mahajan
+  HostName hera-rsa.princeton.rdhpcs.noaa.gov
 
 Host heraBoulder
-    User Rahul.Mahajan
-    HostName hera-rsa.rdhpcs.noaa.gov
+  User Rahul.Mahajan
+  HostName hera-rsa.rdhpcs.noaa.gov
 
 Host heraLocal
-    User Rahul.Mahajan
-    HostName localhost
-    Port 45545
+  User Rahul.Mahajan
+  HostName localhost
+  Port 45545
 
 Host s4
-    User rmahajan
-    HostName s4.ssec.wisc.edu
-
-Host nccs-rsa
-    User rmahajan
-    HostName login.nccs.nasa.gov
-
-Host discover-rsa
-    User rmahajan
-    ProxyCommand ssh -l rmahajan nccs-rsa direct discover.nccs.nasa.gov
-
-Host dirac-rsa
-    User rmahajan
-    ProxyCommand ssh -l rmahajan nccs-rsa direct dirac.nccs.nasa.gov
-
-Host nccs-piv login
-    HostName login.nccs.nasa.gov
-    PKCS11Provider /usr/lib/ssh-keychain.dylib
-
-Host discover
-    ProxyCommand ssh -l rmahajan nccs-piv direct discover.nccs.nasa.gov
-
-Host dirac
-    ProxyCommand ssh -l rmahajan nccs-piv direct dirac.nccs.nasa.gov
-
-Host sfe
-    User rmahajan
-    HostName sfe3.nas.nasa.gov
-    KexAlgorithms diffie-hellman-group1-sha1
-
-Host sfe1 sfe2 sfe3
-    User rmahajan
-    HostName %h.nas.nasa.gov
-    KexAlgorithms diffie-hellman-group1-sha1
-
-Host pleiades pfe pfe-last
-    User rmahajan
-    ProxyCommand ssh sfe /usr/local/bin/ssh-balance %h
-    HostKeyAlias pfe21.nas.nas.gov
-    HostbasedAuthentication no
+  User rmahajan
+  HostName s4.ssec.wisc.edu
 
 Host gerrit
-    User Rahul.Mahajan
-    HostName vlab.ncep.noaa.gov
-    Port 29418
-
-Host github
-    User git
-    HostName github.com
-
-Host github-nasa
-    User git
-    HostName developer.nasa.gov
-
-Host polar
-    User rmahajan
-    HostName polar.gsfc.nasa.gov
-
-Host ice
-    User rmahajan
-    HostName gs6101-ice.ndc.nasa.gov
-
-Host thunder
-    User rmahajan
-    HostName thunder.gsfc.nasa.gov
-
-Host cumulus
-    User rmahajan
-    HostName cumulus.gsfc.nasa.gov
-
-Host cvsacldirect
-    HostName cvsacl.nccs.nasa.gov
-    Port 22223
-
-Host cvsacl
-    HostName cvsacl.nccs.nasa.gov
-    LocalForward 56103 localhost:22223
-
-Host ctunnel
-    HostName localhost
-    Port 56103
+  User Rahul.Mahajan
+  HostName vlab.ncep.noaa.gov
+  Port 29418
 
 Host dorne
-    User rmahajan
-    #HostName mahajans.ddns.net
-    HostName 96.255.29.88
-    Port 2222
+  User rmahajan
+  HostName 96.255.29.88
+  Port 2222
 
 Host *
-    ControlMaster auto
-    ControlPath ~/.ssh/master-%r@%h:%p
-    #ControlPersist 600
-    LogLevel Quiet
-    Protocol 2
-    ServerAliveInterval 600
-    ServerAliveCountMax 144
+  ControlMaster auto
+  ControlPath ~/.ssh/master-%r@%h:%p
+  #ControlPersist 600
+  LogLevel Quiet
+  Protocol 2
+  ServerAliveInterval 600
+  ServerAliveCountMax 144

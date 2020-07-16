@@ -22,7 +22,8 @@ program advance_time
    !
 
 ! To compile, do:
-! ifort -03 -w -ftz -align all -fno-alias -fp-model precise -convert big_endian advance_time.f90 -o advance_time
+! ifort -fpp -g -traceback -O3 advance_time.F90 -o advance_time
+! gfortran -cpp -g -fbacktrace -03 advance_time.F90 -o advance_time
 
    implicit none
 
@@ -31,10 +32,13 @@ program advance_time
 ! ifort does not seem to care either way.)  If you get a compiler error
 ! building this program, comment the following 4 lines in or out and try again.
 !START BLOCK
+#ifdef __GFORTRAN__
+#else
    interface
       integer function iargc()
       end function iargc
    end interface
+#endif
 !END BLOCK
 
    integer :: ccyy, mm, dd, hh, nn, ss, dday, dh, dn, ds, gday, gsec
