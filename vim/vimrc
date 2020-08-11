@@ -264,6 +264,9 @@ nnoremap <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
+" put one word per line
+nnoremap <leader>sl :%s/\s\+/\r/g <CR>
+
 " expand tab and retab in one go
 nnoremap <leader>rt :set expandtab \| :retab<CR>
 
