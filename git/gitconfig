@@ -291,5 +291,7 @@
   insteadOf = mygh:
 [url "https://github.com/NOAA-EMC/"]
   insteadOf = emcgh:
+[url "https://github.com/ufs-community/"]
+  insteadOf = ufsgh:
 [init]
   templatedir = ~/.git

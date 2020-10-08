@@ -1,9 +1,14 @@
-Host gaea
+Host emc
+  User rmahajan
+  HostName emc-lw-rmahajan.ncep.noaa.gov
+
+Host devwcoss
   User Rahul.Mahajan
-  #HostName gaea-rsa.rdhpcs.noaa.gov
-  HostName gaea-rsa.princeton.rdhpcs.noaa.gov
-  RemoteForward 20545 localhost:22
-  NoHostAuthenticationForLocalhost yes
+  HostName devbastion.ncep.noaa.gov
+
+Host prodwcoss
+  User Rahul.Mahajan
+  HostName prodbastion.ncep.noaa.gov
 
 Host dtn-hera
   User Rahul.Mahajan
@@ -22,19 +27,38 @@ Host heraLocal
   HostName localhost
   Port 45545
 
+Host orion
+  User rmahajan
+  HostName orion-login.hpc.msstate.edu
+
 Host s4
   User rmahajan
   HostName s4.ssec.wisc.edu
+
+Host gaea
+  User Rahul.Mahajan
+  #HostName gaea-rsa.rdhpcs.noaa.gov
+  HostName gaea-rsa.princeton.rdhpcs.noaa.gov
+  RemoteForward 20545 localhost:22
+  NoHostAuthenticationForLocalhost yes
 
 Host gerrit
   User Rahul.Mahajan
   HostName vlab.ncep.noaa.gov
   Port 29418
 
+Host github
+  User git
+  HostName github.com
+
 Host dorne
   User rmahajan
   HostName 96.255.29.88
   Port 2222
+
+Host dorneLocal
+  User rmahajan
+  HostName dorne.local
 
 Host *
   ControlMaster auto

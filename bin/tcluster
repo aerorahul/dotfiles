@@ -39,7 +39,7 @@ class Tunnel(object):
     def __checkStatus(self):
         try:
             proc1 = sp.Popen(split('ps x'), stdout=sp.PIPE)
-            proc2 = sp.Popen(split('grep -e "-YMNfq %s"' % self.machine),
+            proc2 = sp.Popen(split(f'grep -e "-YMNfq {self.machine}"'),
                              stdin=proc1.stdout, stdout=sp.PIPE, stderr=sp.PIPE)
             proc3 = sp.Popen(split('grep -v grep'),
                              stdin=proc2.stdout, stdout=sp.PIPE, stderr=sp.PIPE)
@@ -70,6 +70,7 @@ class Tunnel(object):
             sp.call(['ssh', '-YMNfq', f'{self.machine}'])
         except:
             raise OSError(f"tunnel to {self.machine} was not created")
+        self.__checkStatus
         return
 
     @property
@@ -78,12 +79,13 @@ class Tunnel(object):
         if self.__plist:
             for pid in self.__plist:
                 try:
-                    sp.call(['kill', '%s' % pid])
+                    sp.call(['kill', f'{pid}'])
                 except:
                     raise OSError(f"tunnel to {self.machine} could not be closed through process id {pid}")
             self.__rmMasterFile
         else:
             print(f"No tunnels open to {self.machine}")
+        self.__checkStatus
         return
 
     @property
