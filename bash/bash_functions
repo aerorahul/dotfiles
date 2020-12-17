@@ -3,50 +3,50 @@
 
 # Functions for mounting/unmounting SSHFS volumes
 function mountDir(){
-    dirName=$1
-    action=$2
-    if [ -d $dirName ]; then
-        if [ $action = "mk" ]; then
-            echo "$dirName exists, use it!"
-            return 1
-        elif [ $action = "rm" ]; then
-            rmdir $dirName
-        else
-            echo "mountDir: unknown action '$action', ABORT!"
-        fi
+  dirName=$1
+  action=$2
+  if [ -d $dirName ]; then
+    if [ $action = "mk" ]; then
+      echo "$dirName exists, use it!"
+      return 1
+    elif [ $action = "rm" ]; then
+      rmdir $dirName
     else
-        if [ $action = "mk" ]; then
-            mkdir -p $dirName
-        elif [ $action = "rm" ]; then
-            echo "$dirName does not exist!"
-            return 1
-        else
-            echo "mountDir: unknown action '$action', ABORT!"
-        fi
+      echo "mountDir: unknown action '$action', ABORT!"
     fi
+  else
+    if [ $action = "mk" ]; then
+      mkdir -p $dirName
+    elif [ $action = "rm" ]; then
+      echo "$dirName does not exist!"
+      return 1
+    else
+      echo "mountDir: unknown action '$action', ABORT!"
+    fi
+  fi
 }
 
 function remoteFS() {
-    action=$1
-    machine=$2
-    remDir=$3
-    locDir=$4
-    if [ $action = "mount" ]; then
-        mountDir $locDir "mk" && sshfs $machine:$remDir $locDir
-    elif [ $action = "umount" ]; then
-        umount $locDir && mountDir $locDir "rm"
-    elif [ $action = "clean" ]; then
-        mountDir $locDir "rm"
-    else
-        echo "Incorrect usage, ABORT!"
-        echo "usage:"
-        echo "remoteFS action machine remDir locDir"
-        echo "    action [ mount | umount | clean ]"
-        echo "   machine [ discover | cumulus | polar | s4 ]"
-        echo "    remDir [ /full/path/to/remote/dir ]"
-        echo "    locDir [ /full/path/to/local/dir ]"
-        return 1
-    fi
+  action=$1
+  machine=$2
+  remDir=$3
+  locDir=$4
+  if [ $action = "mount" ]; then
+    mountDir $locDir "mk" && sshfs $machine:$remDir $locDir
+  elif [ $action = "umount" ]; then
+    umount $locDir && mountDir $locDir "rm"
+  elif [ $action = "clean" ]; then
+    mountDir $locDir "rm"
+  else
+    echo "Incorrect usage, ABORT!"
+    echo "usage:"
+    echo "remoteFS action machine remDir locDir"
+    echo "  action [ mount | umount | clean ]"
+    echo "   machine [ discover | cumulus | polar | s4 ]"
+    echo "  remDir [ /full/path/to/remote/dir ]"
+    echo "  locDir [ /full/path/to/local/dir ]"
+    return 1
+  fi
 }
 
 # scp/rsync To/From
@@ -57,60 +57,60 @@ function rsyncFrom() { remote=$1; remoteFile=$2; localFile=$3; rsync -auvx --pro
 
 # Function to toggle Git-LFS and give Status
 function toggleGITLFS() {
-    if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
-        echo "Disable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=1
-        return
-    fi
-    if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
-        echo "Disable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=1
-        return
-    elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
-        echo "Enable Git-LFS"
-        export GIT_LFS_SKIP_SMUDGE=0
-        return
-    fi
+  if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
+    echo "Disable Git-LFS"
+    export GIT_LFS_SKIP_SMUDGE=1
+    return
+  fi
+  if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
+    echo "Disable Git-LFS"
+    export GIT_LFS_SKIP_SMUDGE=1
+    return
+  elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
+    echo "Enable Git-LFS"
+    export GIT_LFS_SKIP_SMUDGE=0
+    return
+  fi
 }
 
 function GitLFS-status() {
-    if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
-        echo "Git-LFS is ON"
-        return
-    fi
-    if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
-        echo "Git-LFS is ON"
-        return
-    elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
-        echo "Git-LFS is OFF"
-        return
-    fi
+  if [ -z "$GIT_LFS_SKIP_SMUDGE" ]; then
+    echo "Git-LFS is ON"
+    return
+  fi
+  if [ ${GIT_LFS_SKIP_SMUDGE} -eq 0 ]; then
+    echo "Git-LFS is ON"
+    return
+  elif [ ${GIT_LFS_SKIP_SMUDGE} -eq 1 ]; then
+    echo "Git-LFS is OFF"
+    return
+  fi
 }
 
 function toggleGITprompt() {
-    if [ -z "$GIT_PROMPT_IGNORE" ]; then
-        echo "Ignore Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=1
-        #export GIT_PS1_SHOWDIRTYSTATE=false
-        #export GIT_PS1_SHOWUNTRACKEDFILES=false
-        return
-    fi
-    if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
-        echo "Disable Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=1
-        #export GIT_PS1_SHOWDIRTYSTATE=false
-        #export GIT_PS1_SHOWUNTRACKEDFILES=false
-        return
-    elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
-        echo "Enable Git-Prompt"
-        PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
-        export GIT_PROMPT_IGNORE=0
-        #export GIT_PS1_SHOWDIRTYSTATE=true
-        #export GIT_PS1_SHOWUNTRACKEDFILES=true
-        return
-    fi
+  if [ -z "$GIT_PROMPT_IGNORE" ]; then
+    echo "Ignore Git-Prompt"
+    PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+    export GIT_PROMPT_IGNORE=1
+    #export GIT_PS1_SHOWDIRTYSTATE=false
+    #export GIT_PS1_SHOWUNTRACKEDFILES=false
+    return
+  fi
+  if [ ${GIT_PROMPT_IGNORE} -eq 0 ]; then
+    echo "Disable Git-Prompt"
+    PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+    export GIT_PROMPT_IGNORE=1
+    #export GIT_PS1_SHOWDIRTYSTATE=false
+    #export GIT_PS1_SHOWUNTRACKEDFILES=false
+    return
+  elif [ ${GIT_PROMPT_IGNORE} -eq 1 ]; then
+    echo "Enable Git-Prompt"
+    PS1="\! \h ${YELLOW}\W${MAGENTA}\$(__git_ps1 ' |%s|') ${CYAN}$ ${ENDCOLOR}"
+    export GIT_PROMPT_IGNORE=0
+    #export GIT_PS1_SHOWDIRTYSTATE=true
+    #export GIT_PS1_SHOWUNTRACKEDFILES=true
+    return
+  fi
 }
 
 # Functions used with find
@@ -119,60 +119,74 @@ autofindls () { find . -name $1 -exec ls -lhd {} \;; }
 
 # Functions to give/take permissions
 permit () {
-    find $1 -type d -print -exec chmod a+rx {} \;;
-    find $1 -type f -print -exec chmod a+r  {} \;;
+  find $1 -type d -print -exec chmod a+rx {} \;;
+  find $1 -type f -print -exec chmod a+r  {} \;;
 }
 unpermit () {
-    find $1 -type d -print -exec chmod og-rx {} \;;
-    find $1 -type f -print -exec chmod og-r  {} \;;
+  find $1 -type d -print -exec chmod og-rx {} \;;
+  find $1 -type f -print -exec chmod og-r  {} \;;
 }
 
 # Function to extract a compressed archive
 function extract {
  if [ -z "$1" ]; then
-    # display usage if no parameters given
-    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
-    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
-    return 1
+  # display usage if no parameters given
+  echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+  echo "     extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+  return 1
  else
-    for n in $@
-    do
-      if [ -f "$n" ] ; then
-          case "${n%,}" in
-            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
-                         tar xvf "$n"       ;;
-            *.lzma)      unlzma ./"$n"      ;;
-            *.bz2)       bunzip2 ./"$n"     ;;
-            *.rar)       unrar x -ad ./"$n" ;;
-            *.gz)        gunzip ./"$n"      ;;
-            *.zip)       unzip ./"$n"       ;;
-            *.z)         uncompress ./"$n"  ;;
-            *.7z|*.arj|*.cab|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.rpm|*.udf|*.wim|*.xar)
-                         7z x ./"$n"        ;;
-            *.xz)        unxz ./"$n"        ;;
-            *.exe)       cabextract ./"$n"  ;;
-            *)
-                         echo "extract: '$n' - unknown archive method"
-                         return 1
-                         ;;
-          esac
-      else
-          echo "'$n' - file does not exist"
-          return 1
-      fi
-    done
+  for n in $@
+  do
+    if [ -f "$n" ] ; then
+      case "${n%,}" in
+      *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
+             tar xvf "$n"     ;;
+      *.lzma)    unlzma ./"$n"    ;;
+      *.bz2)     bunzip2 ./"$n"   ;;
+      *.rar)     unrar x -ad ./"$n" ;;
+      *.gz)    gunzip ./"$n"    ;;
+      *.zip)     unzip ./"$n"     ;;
+      *.z)     uncompress ./"$n"  ;;
+      *.7z|*.arj|*.cab|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.rpm|*.udf|*.wim|*.xar)
+             7z x ./"$n"    ;;
+      *.xz)    unxz ./"$n"    ;;
+      *.exe)     cabextract ./"$n"  ;;
+      *)
+             echo "extract: '$n' - unknown archive method"
+             return 1
+             ;;
+      esac
+    else
+      echo "'$n' - file does not exist"
+      return 1
+    fi
+  done
 fi
 }
 
 # Function to make a directory and cd into it.
-mkcd () { mkdir -p $1; cd $1; }
+mkcd () { mkdir -vp "$@"; cd "$@"; }
 
 # Setting up timers
 timer () {
-    seconds=${1:-"60"}
-    echo "running a $seconds seconds timer starting $(date)";
-    sleep ${seconds};
+  seconds=${1:-"60"}
+  echo "running a $seconds seconds timer starting $(date)";
+  sleep ${seconds};
 #zenity --info --text="Time is up : $(date)`";
 }
 
+# Reset Github author and email info
+resetGHauthor() {
+  git config --local user.name "Rahul Mahajan"
+  git config --local user.email "aerorahul@users.noreply.github.com"
+  git commit --amend --reset-author
+}
+
+ftext () {
+  grep -iIHrn --color=always "$1" . | less -R -r
+}
+
+duplicatefind () {
+  find -not -empty -type f -printf "%s\n" | sort -rn | uniq -d | xargs -I{} -n1 find -type f -size {}c -print0 | xargs -0 md5sum | sort | uniq -w32 --all-repeated=separate
+}
 ###############################################################

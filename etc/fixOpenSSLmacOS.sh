@@ -22,7 +22,7 @@ if [ -f /usr/local/lib/libcrypto.dylib ]; then
     mv /usr/local/lib/libcrypto.dylib /usr/local/lib/libcrypto_bak.dylib
 fi
 
-sVer='1.1.1g'
+sVer='1.1.1h'
 
 # Leaving some commands to check directory contents
 # ls -al /usr/local/Cellar/openssl@1.1/$sVer/lib

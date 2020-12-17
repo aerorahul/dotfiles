@@ -23,9 +23,9 @@ if ( ! $?prompt ) exit
 # Make sure TERMCAP entry for xterm is correct
 if ($?TERM) then
     if ($TERM == "xterm") then
-	    resize > /tmp/out.$$
-		source /tmp/out.$$
-		\rm /tmp/out.$$
+      resize > /tmp/out.$$
+    source /tmp/out.$$
+    \rm /tmp/out.$$
     endif
 endif
 ###############################################################
@@ -35,10 +35,10 @@ endif
 # Only do this if this shell is an interactive one.
 if ($?user == 0 || $?prompt == 0) exit
 if ($?tcsh) then
-	set prompt = "%h %m%% "
-#	set prompt = "%n %c%% "
+  set prompt = "%h %m%% "
+# set prompt = "%n %c%% "
 else
-	set prompt = "\! `hostname | sed -e 's/\..*//'`% "
+  set prompt = "\! `hostname | sed -e 's/\..*//'`% "
 endif
 ###############################################################
 
@@ -176,7 +176,7 @@ alias df    'df -h'
 alias du    'du -hs'
 alias grep  'grep --color'
 
-#	Aliases for ls
+# Aliases for ls
 setenv LSCOLORS "ExGxCxDxBxegedabagaced" # Good for dark background
 alias ls   '/bin/ls --color=auto'
 alias l    'ls -l'

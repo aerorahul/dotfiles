@@ -1,5 +1,5 @@
 ###############################################################
-# Source user-defined functions
+# Source user-defined functions [aliases below use these]
 test -e "${HOME}/.bash_functions" && source "${HOME}/.bash_functions"
 
 ###############################################################
@@ -31,10 +31,10 @@ alias fme='tbl \!* | nroff -me |more -s'
 
 #	Aliases for ls
 case $OSTYPE in
-    darwin* )
-        alias ls='/bin/ls -G' ;;
-    linux* )
-        alias ls='/bin/ls --color=auto' ;;
+  darwin* )
+    alias ls='/bin/ls -G' ;;
+  linux* )
+    alias ls='/bin/ls --color=auto' ;;
 esac
 alias l='ls -l'
 alias ll='ls -l'
@@ -79,9 +79,15 @@ alias discover='sshxy discover'
 alias s4='sshxy s4'
 alias s4-submit='sshxy -t s4 ssh -XY s4-submit'
 
-# Aliases for Theia/Hera
+# Aliases for Orion
+alias torion='tcluster -m orion'
+alias orion='sshxy orion'
+
+# Aliases for Jet
 alias jetTunnel='sshxy -q -L 11845:localhost:11845 jet'
 alias jetLocal='sshxy -q jetLocal'
+
+# Aliases for Hera
 alias heraTunnel='sshxy -q -L 45545:localhost:45545 hera'
 alias herabTunnel='sshxy -q -L 45545:localhost:45545 heraBoulder'
 alias heraLocal='sshxy -q heraLocal'
@@ -104,6 +110,7 @@ function hera_stmp1() { remoteFS $1 heraLocal /scratch1/NCEPDEV/stmp1/Rahul.Maha
 function hera_stmp2() { remoteFS $1 heraLocal /scratch1/NCEPDEV/stmp1/Rahul.Mahajan ${HOME}/Volumes/hera/scratch1/NCEPDEV/stmp2/Rahul.Mahajan; }
 function hera_stmp3() { remoteFS $1 heraLocal /scratch2/NCEPDEV/stmp3/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp3/Rahul.Mahajan; }
 function hera_stmp4() { remoteFS $1 heraLocal /scratch2/NCEPDEV/stmp4/Rahul.Mahajan ${HOME}/Volumes/hera/scratch2/NCEPDEV/stmp4/Rahul.Mahajan; }
+function orion_work() { remoteFS $1 orion /work/noaa/da/rmahajan ${HOME}/Volumes/orion/work/noaa/da/rmahajan; }
 
 # Aliases for Git mistype and Git commands
 alias gti='git'
@@ -143,23 +150,22 @@ alias owd='pwd'
 alias mcd='mkcd'
 alias mkd='mkcd'
 
-
 # Aliases for vi, vim, gvim and their mis-typos
 case $OSTYPE in
-    darwin* )
-        if [ -d "/Applications/MacVim.app/Contents/bin" ]; then
-            # If MacVim installation exists, use it
-            export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
-        else
-            # Use Homebrew installation
-            alias vim="mvim -v"
-            alias gvim="mvim -g"
-        fi
-        alias vi='vim'
-        ;;
-    linux* )
-        alias vi='vim'
-        ;;
+  darwin* )
+    if [ -d "/Applications/MacVim.app/Contents/bin" ]; then
+      # If MacVim installation exists, use it
+      export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
+    else
+      # Use Homebrew installation
+      alias vim="mvim -v"
+      alias gvim="mvim -g"
+    fi
+    alias vi='vim'
+    ;;
+  linux* )
+    alias vi='vim'
+    ;;
 esac
 alias ci='vi'
 alias ci='vi'
@@ -174,12 +180,12 @@ alias gvi='gvim'
 
 # Aliases for tkcvs, tksvn and tkdiff from TwoBarleyCorns; and xxdiff
 case $OSTYPE in
-    darwin* )
-        alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-        alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
-        alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
-        alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff'
-        ;;
+  darwin* )
+    alias tkcvs='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+    alias tksvn='/Applications/TkCVS.app/Contents/MacOS/tkcvs.kit'
+    alias tkdiff='/Applications/TkDiff.app/Contents/MacOS/tkdiff'
+    alias xxdiff='/Applications/xxdiff.app/Contents/MacOS/xxdiff'
+    ;;
 esac
 
 # Alias for diff (Use colordiff)
@@ -187,10 +193,10 @@ alias diff='colordiff'
 
 # Alias for ps
 case $OSTYPE in
-    darwin* )
-        alias psr='ps -U $USER -f';;
-    linux* )
-        alias psr='ps -u $USER -f';;
+  darwin* )
+    alias psr='ps -U $USER -f';;
+  linux* )
+    alias psr='ps -u $USER -f';;
 esac
 alias psax='ps ax | grep -v root'
 alias psax='ps axo USER:20,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm'
@@ -210,17 +216,17 @@ alias xztar='tar -xzf'
 
 # Aliases for open
 case $OSTYPE in
-    darwin* )
-        alias oepn='open'
-        alias opne='open'
-        ;;
+  darwin* )
+    alias oepn='open'
+    alias opne='open'
+    ;;
 esac
 
 # Aliases for ldd
 case $OSTYPE in
-    darwin* )
-        alias ldd='otool -L'
-        ;;
+  darwin* )
+    alias ldd='otool -L'
+    ;;
 esac
 
 # Aliases for tail
@@ -233,14 +239,13 @@ alias lmodule='module'
 alias moduele='module'
 
 # Aliases for AWS
-alias sshaws='ssh -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
-alias scpaws='scp -i ${HOME}/.ssh/rmahajan-key-pair-nova.pem'
+alias sshaws='ssh -i ${HOME}/.aws/rmahajan-aws.pem'
+alias scpaws='scp -i ${HOME}/.aws/rmahajan-aws.pem'
 
 # Aliases for wget
 case $OSTYPE in
-    darwin* )
-        alias wget='wget --no-check-certificate'
-        ;;
+  darwin* )
+    alias wget='wget --no-check-certificate'
+    ;;
 esac
-
 ###############################################################
