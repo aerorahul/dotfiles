@@ -12,42 +12,42 @@
 #
 #brew install openssl@1.1
 
-echo 'backup existing lib files, if they exist'
+version=${1:-"1.1.1i"}
 
 if [ -f /usr/local/lib/libssl.dylib ]; then
+    echo 'backing up existing libssl.dylib'
     mv /usr/local/lib/libssl.dylib /usr/local/lib/libssl_bak.dylib
 fi
 
 if [ -f /usr/local/lib/libcrypto.dylib ]; then
+    echo 'backing up existing libcrypto.dylib'
     mv /usr/local/lib/libcrypto.dylib /usr/local/lib/libcrypto_bak.dylib
 fi
 
-sVer='1.1.1h'
-
 # Leaving some commands to check directory contents
-# ls -al /usr/local/Cellar/openssl@1.1/$sVer/lib
+# ls -al /usr/local/Cellar/openssl@1.1/$version/lib
 # ls -al /usr/local/lib/libssl* && ls -al /usr/local/lib/libcrypto*
 
 echo 'add symlink to missing openssl libs'
 
-if [ -f /usr/local/Cellar/openssl@1.1/$sVer/lib/libssl.1.1.dylib ]; then
-    sudo ln -s /usr/local/Cellar/openssl@1.1/$sVer/lib/libssl.1.1.dylib /usr/local/lib/libssl.dylib
+if [ -f /usr/local/Cellar/openssl@1.1/$version/lib/libssl.1.1.dylib ]; then
+    sudo ln -s /usr/local/Cellar/openssl@1.1/$version/lib/libssl.1.1.dylib /usr/local/lib/libssl.dylib
 fi
 
-if [ -f /usr/local/Cellar/openssl@1.1/$sVer/lib/libcrypto.1.1.dylib ]; then
-    sudo ln -s /usr/local/Cellar/openssl@1.1/$sVer/lib/libcrypto.1.1.dylib /usr/local/lib/libcrypto.dylib
+if [ -f /usr/local/Cellar/openssl@1.1/$version/lib/libcrypto.1.1.dylib ]; then
+    sudo ln -s /usr/local/Cellar/openssl@1.1/$version/lib/libcrypto.1.1.dylib /usr/local/lib/libcrypto.dylib
 fi
 
-echo 'add symlink to missing openssl pkg-config files'
+echo 'add symlink to missing openssl pkgconfig files'
 
-if [ -f /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/openssl.pc ]; then
-    sudo ln -s /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/openssl.pc /usr/local/lib/pkg-config/openssl.pc
+if [ -f /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/openssl.pc ]; then
+    sudo ln -s /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/openssl.pc /usr/local/lib/pkgconfig/openssl.pc
 fi
 
-if [ -f /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/libssl.pc ]; then
-    sudo ln -s /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/libssl.pc /usr/local/lib/pkg-config/libssl.pc
+if [ -f /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/libssl.pc ]; then
+    sudo ln -s /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/libssl.pc /usr/local/lib/pkgconfig/libssl.pc
 fi
 
-if [ -f /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/libcrypto.pc ]; then
-    sudo ln -s /usr/local/Cellar/openssl@1.1/$sVer/lib/pkg-config/libcrypto.pc /usr/local/lib/pkg-config/libcrypto.pc
+if [ -f /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/libcrypto.pc ]; then
+    sudo ln -s /usr/local/Cellar/openssl@1.1/$version/lib/pkgconfig/libcrypto.pc /usr/local/lib/pkgconfig/libcrypto.pc
 fi
