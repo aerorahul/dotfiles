@@ -1,11 +1,12 @@
 [ -z "$PS1" ] && return
 
-# (Git) Prompt and Color variables
-YELLOW="\[\e[1;33m\]"
-MAGENTA="\[\e[1;35m\]"
-CYAN="\[\e[1;36m\]"
-ENDCOLOR="\[\e[m\]"         # ends the last color
-PS1="\! \h ${YELLOW}\W${MAGENTA} ${CYAN}$ ${ENDCOLOR}"
+Yellow="\[\033[0;33m\]"
+Magenta="\[\033[0;35m\]"
+BoldRed="\[\033[1;31m\]"
+BoldYellow="\[\033[1;33m\]"
+BoldGreen="\[\033[1;32m\]"
+ResetColor="\[\033[0;0m\]"
+PS1="\! \h ${Yellow}\W${Magenta} ${BoldRed}❯${BoldYellow}❯${BoldGreen}❯ ${ResetColor}"
 
 export EDITOR="vim"
 
