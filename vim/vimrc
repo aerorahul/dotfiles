@@ -173,6 +173,10 @@ set wildmenu           " enable completion upon <Tab> (wmnu)
 set wildignore=*.o,*.mod,*~,*.pyc   " ignore filetypes
 set wildignore+=.git\*,.hg\*,.svn\* " also ignore version control files
 
+set joinspaces      " Insert 2 spaces after a '.', '?', '!'. Otherwise 1 space (js)
+set splitright      " when on splitting, put window on right (spr)
+set clipboard+=unnamed
+
 " ===============
 " PLUGIN SETTINGS
 " ===============
