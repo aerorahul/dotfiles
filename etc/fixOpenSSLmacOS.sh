@@ -12,7 +12,7 @@
 #
 #brew install openssl@1.1
 
-version=${1:-"1.1.1i"}
+version=$(brew list --formula openssl@1.1 --versions | cut -d " " -f2)
 
 if [ -f /usr/local/lib/libssl.dylib ]; then
     echo 'backing up existing libssl.dylib'
