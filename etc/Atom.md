@@ -1,0 +1,22 @@
+## Packages
+- atom-beautify
+- file-icons
+- atom-ide-ui
+- autocomplete-python
+- firacode
+- git-plus
+- highlight-selected
+- ide-cpp
+- ide-html
+- ide-python
+- language-cmake
+- language-fortran
+- language-latex
+- latex
+- minimap
+- pigments
+- relative-numbers
+- vim-mode-plus
+
+## Themes
+- atom-xoria

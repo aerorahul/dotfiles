@@ -29,6 +29,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'tc50cal/vim-terminal'
 "Plug 'tpope/vim-rsi'
 "Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one

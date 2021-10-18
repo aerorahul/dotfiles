@@ -45,6 +45,7 @@ tpope/vim-repeat
 tpope/vim-rsi
 vim-latex/vim-latex
 ryanoasis/vim-devicons
+tc50cal/vim-terminal'
 "
 
 # Location of plugins
