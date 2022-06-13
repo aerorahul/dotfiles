@@ -1,14 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-###############################################################
-# disk_usage.py - spit out disk usage based on user group on Theia
-###############################################################
+###################################################################
+# disk_usage.py - spit out disk usage based on user group on RDHPCS
+###################################################################
 
 import os
 import sys
 import subprocess
 import grp
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+
+
+_colors = {'blue':'\033[1;34m',
+           'cyan':'\033[1;36m',
+           'red':'\033[5;41;1;37m',
+           'reset':'\33[0m'}
 
 _groups = [g.gr_name for g in grp.getgrall() if os.environ['USER'] in g.gr_mem]
 
@@ -31,21 +37,21 @@ else:
 groups = args.groups + ['stmp%d' %
                         i for i in range(1, 5)] if (args.stmp) else args.groups
 
-quotadb = "/scratch3/BMC/public/quotas"
+quotadb = "/scratch2/BMC/public/quotas"
 
 for group in groups:
     if group in ['rstprod']:
         continue
-    fname = '%s/%s' % (quotadb, group)
+    fname = f'{quotadb}/{group}'
     if not os.path.isfile(fname):
         continue
-    print("\033[1;36m================================================================\033[0m")
-    print("          \033[1;34m Project: \033[5;41;1;37m %s \033[0m" % group)
-    cmd = 'cat %s | head -n %d' % (fname, nlines)
+    print(f"{_colors['cyan']} {'='*80} {_colors['reset']}")
+    print(f"\t\t{_colors['blue']}\tProject:\t{_colors['red']}{group}{_colors['reset']}")
+    cmd = f'cat {fname} | head -n {nlines}'
     try:
         subprocess.check_call(cmd, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
         print(e.output)
-    print("\033[1;36m================================================================\033[0m")
+    print(f"{_colors['cyan']} {'='*80} {_colors['reset']}")
 
 sys.exit(0)
