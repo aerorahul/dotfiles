@@ -11,10 +11,10 @@ import grp
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 
-_colors = {'blue':'\033[1;34m',
-           'cyan':'\033[1;36m',
-           'red':'\033[5;41;1;37m',
-           'reset':'\33[0m'}
+_colors = {'blue': '\033[1;34m',
+           'cyan': '\033[1;36m',
+           'red': '\033[5;41;1;37m',
+           'reset': '\33[0m'}
 
 _groups = [g.gr_name for g in grp.getgrall() if os.environ['USER'] in g.gr_mem]
 
