@@ -45,7 +45,7 @@ tpope/vim-repeat
 tpope/vim-rsi
 vim-latex/vim-latex
 ryanoasis/vim-devicons
-tc50cal/vim-terminal'
+tc50cal/vim-terminal
 "
 
 # Location of plugins
@@ -76,12 +76,7 @@ done
 EOF
 chmod +x $updatescr
 
-echo "========================================"
-echo "========================================"
-echo "Don't forget to enable plugins by doing:"
-echo "vi ~/.vimrc"
-echo ":PlugInstall"
-echo "========================================"
-echo "========================================"
+# Install/Enable plugins
+vim -c ":PlugInstall" -c ":q" -c ":q"
 
 exit 0
