@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+#-------------------------------------------------------------------------------
+# touchme: touch all files in a directory so they do not go to tape
+#-------------------------------------------------------------------------------
+# -  -  -  D I S C L A I M E R  -  -  -
+# This script is written by the author for the authors purposes.
+# It is not available for free use without written or electronic consent of the
+# author. Any use without consent is strictly prohibited and the author cannot be
+# held liable for any use or misuse of this script under any conditions what-so-ever.
+#-------------------------------------------------------------------------------
+
+import os
+import sys
+import logging
+from argparse import ArgumentParser
+from subprocess import run, CalledProcessError
+
+
+def touch_file(file_path, dryrun):
+    if dryrun:
+        logging.info(f"Test: {file_path}")
+    else:
+        logging.debug(f"Touching: {file_path}")
+        try:
+            run(['touch', file_path], check=True)
+        except CalledProcessError as ee:
+            logging.error(f"Error touching file {file_path}: {ee}", file=sys.stderr)
+            raise RuntimeError(f"Error touching file {file_path}: {ee}")
+
+
+def process_target(target_path, dryrun):
+    if os.path.isfile(target_path):
+        touch_file(target_path, dryrun)
+    elif os.path.isdir(target_path):
+        for root, subFolders, files in os.walk(target_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                touch_file(file_path, dryrun)
+    else:
+        logging.error(f"{target_path} is neither a file nor a directory.")
+        raise FileNotFoundError(f"{target_path} is neither a file nor a directory.")
+
+
+def main():
+    parser = ArgumentParser(description='Update the timestamps of files or directories.')
+
+    parser.add_argument('targets', metavar='TARGET', type=str, nargs='+',
+                        help='files or directories to keep alive')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='enable verbose output')
+    parser.add_argument('-n', '--dryrun', action='store_true',
+                        help='dry-run only; do not touch')
+
+    args = parser.parse_args()
+
+    # Configure logging
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    for target_path in args.targets:
+        process_target(target_path, args.dryrun)
+
+
+#-------------------------------------------------------------------------------
+if __name__ == "__main__":
+    main()
+#-------------------------------------------------------------------------------
+
