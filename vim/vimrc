@@ -30,6 +30,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tc50cal/vim-terminal'
+Plug 'z0mbix/vim-shfmt'
 "Plug 'tpope/vim-rsi'
 "Plug 'vim-latex/vim-latex'
 "Plug 'ryanoasis/vim-devicons' "Needs special fonts from ; Must always be the last one
@@ -245,6 +246,10 @@ map <C-n> :NERDTreeToggle<CR>
 "autocmd vimenter * NERDTree "open NERDTree on vim start-up
 "close vim if NERDTree is the only thing open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" vim-shfmt
+" =========
+let g:shfmt_extra_args = '-i 2'
 
 " ========
 " MAPPINGS
