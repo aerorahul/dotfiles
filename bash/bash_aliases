@@ -35,6 +35,8 @@ case $OSTYPE in
     alias ls='/bin/ls -G' ;;
   linux* )
     alias ls='/bin/ls --color=auto' ;;
+  msys* )
+    alias ls='/bin/ls -F --color=auto--show-control-chars' ;;
 esac
 alias l='ls -l'
 alias ll='ls -l'
@@ -165,6 +167,9 @@ case $OSTYPE in
     ;;
   linux* )
     alias vi='vim'
+    ;;
+  msys* )
+    alias gvim="/c/Users/rahul.mahajan/AppData/Local/Program\ Files/Vim/vim91/gvim.exe"
     ;;
 esac
 alias ci='vi'
