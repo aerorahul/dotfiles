@@ -33,8 +33,8 @@ fi
 
 url="$(git config --local remote.${remote}.url)"
 
-if [[ ! -f ~/.git-clone-init ]]; then
-cat << INPUT > ~/.git-clone-init
+if [[ ! -f ~/.git/git-clone-init ]]; then
+cat << INPUT > ~/.git/git-clone-init
 #!/bin/bash
 
 case "\$url" in
@@ -42,13 +42,13 @@ case "\$url" in
   *//github.com/*   ) email=""; name="";;
 esac
 INPUT
-  warn "\nMissing file ~/.git-clone-init. Template created..."
+  warn "\nMissing file ~/.git/git-clone-init. Template created..."
   exit 0
 fi
-. ~/.git-clone-init
+source ~/.git/git-clone-init
 
 if [[ -z $name || -z $email ]]; then
-  warn "Failed to detect identity using ~/.git-clone-init."
+  warn "Failed to detect identity using ~/.git/git-clone-init."
   exit 0
 fi
 

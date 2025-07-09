@@ -6,7 +6,6 @@ datestr=`date +"%Y%m%d"`
 cp -R git $HOME/.git
 
 files="
-git-clone-init
 gitconfig
 "
 for file in $files; do
