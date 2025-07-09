@@ -16,10 +16,16 @@ if [ -f plug.vim ]; then
     cp plug.vim plug.vim-$datestr
 fi
 
-# Some HPC's do not allow curl; use the clone instead
-#curl -fLo plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-git clone https://github.com/junegunn/vim-plug.git
-cp -R vim-plug/plug.vim $HOME/.vim/autoload/
+if [[ "${OSTYPE}" == "msys" ]]; then
+  iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
+    ni $HOME/vimfiles/autoload/plug.vim -Force
+else
+  # Some HPC's do not allow curl; use the clone instead
+  #curl -fLo plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  git clone https://github.com/junegunn/vim-plug.git
+  cp -R vim-plug/plug.vim $HOME/.vim/autoload/
+  rm -rf vim-plug
+fi
 
 # List all the plugins to be used:
 plugins="
