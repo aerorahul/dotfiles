@@ -163,9 +163,10 @@ set complete+=k               " keyword completion on CTRL-P or CTRL-N (cpt)
 set ruler           " bottom line showing location of cursor (ru)
 set cmdheight=2     " set command bar height
 set showmode        " shows the mode one is in. INSERT or REPLACE (smd)
-set noeb vb t_vb=   " turn off beeping when in NORMAL mode
-set novisualbell    " turn off visual bell (novb)
 set noerrorbells    " turn off error bell or beep (noeb)
+set novisualbell    " turn off visual bell (novb)
+set t_vb=           " turn off beeping when in NORMAL mode
+set belloff=all     " turn off annoying beeping for ALL events; see :help belloff for options (bo)
 
 set ttyfast " indicates a fast terminal connection, helps with copy paste (tf)
 
