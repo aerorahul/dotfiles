@@ -169,7 +169,9 @@ case $OSTYPE in
     alias vi='vim'
     ;;
   msys* )
-    alias gvim="/c/Users/rahul.mahajan/AppData/Local/Program\ Files/Vim/vim91/gvim.exe"
+    # Use vim installation
+    alias vi="${HOME}/AppData/Local/Program\ Files/Vim/vim91/vim.exe"
+    alias gvim="${HOME}/AppData/Local/Program\ Files/Vim/vim91/gvim.exe"
     ;;
 esac
 alias ci='vi'
@@ -194,7 +196,11 @@ case $OSTYPE in
 esac
 
 # Alias for diff (Use colordiff)
-alias diff='colordiff'
+case $OSTYPE in
+  darwin* | linux* )
+    alias diff='colordiff'
+  ;;
+esac
 
 # Alias for ps
 case $OSTYPE in
