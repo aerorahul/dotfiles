@@ -17,7 +17,7 @@ if [ -f plug.vim ]; then
 fi
 
 if [[ "${OSTYPE}" == "msys" ]]; then
-  iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |`
+  iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | \
     ni $HOME/vimfiles/autoload/plug.vim -Force
 else
   # Some HPC's do not allow curl; use the clone instead

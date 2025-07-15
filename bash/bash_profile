@@ -1,11 +1,7 @@
 [ -z "$PS1" ] && return
 
-Yellow="\[\033[0;33m\]"
-Magenta="\[\033[0;35m\]"
-BoldRed="\[\033[1;31m\]"
-BoldYellow="\[\033[1;33m\]"
-BoldGreen="\[\033[1;32m\]"
-ResetColor="\[\033[0;0m\]"
+# Prompt
+test -e "${HOME}/.bash-git-prompt/prompt-colors.sh" && source "${HOME}/.bash-git-prompt/prompt-colors.sh"
 PS1="\! \h ${Yellow}\W${Magenta} ${BoldRed}❯${BoldYellow}❯${BoldGreen}❯ ${ResetColor}"
 
 export EDITOR="vim"
@@ -19,22 +15,20 @@ export REPLYTO="rahul.mahajan@noaa.gov"
 # Display's time of history items
 export HISTTIMEFORMAT="%F %T "
 
+# Define and use CDPATH
+export CDPATH=".:$HOME:$HOME/bin"
+
 # Add CWD(.) and $HOME/bin to path
 export PATH=".:$HOME/bin:$PATH"
-
-###############################################################
-# Initialize LMOD for modules
-#. /usr/local/opt/lmod/init/bash
-#export OPT=${HOME}/opt
-#module use -a ${OPT}/modulefiles/core
-#module use -a ${OPT}/modulefiles/apps
 
 ###############################################################
 # Git settings (completion, prompt, environments)
 test -e "${HOME}/.git-completion.bash" && source "${HOME}/.git-completion.bash"
 if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+  GIT_PROMPT_IGNORE_SUBMODULES=1
   GIT_PROMPT_ONLY_IN_REPO=1
-  source $HOME/.bash-git-prompt/gitprompt.sh
+  GIT_PROMPT_THEME=Sorin
+  source "${HOME}/.bash-git-prompt/gitprompt.sh"
 fi
 
 # Make LS look good
@@ -43,12 +37,15 @@ export LSCOLORS="ExGxCxDxBxegedabagaced" # Good for dark background
 # Make LESS more attractive
 export LESS="-BFIMRX"
 
+# Iterm shell integration
+if [[ "${OSTYPE}" == "Darwin" ]]; then
+  test -e "$(brew --prefix)/etc/bash_completion" && source "$(brew --prefix)/etc/bash_completion"
+  test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+fi
+
 ###############################################################
 # Set user-defined aliases
 test -e "${HOME}/.bash_aliases" && source "${HOME}/.bash_aliases"
-test -e "$(brew --prefix)/etc/bash_completion" && source "$(brew --prefix)/etc/bash_completion"
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-
-###############################################################
-# Set site specific aliases and functions
 test -e "${HOME}/.bash_site" && source "${HOME}/.bash_site"
+
